@@ -18,11 +18,11 @@
 </p>
 
 <p align="center">
-  <a href="VIDEO_URL"><img src="docs/img/demo-thumbnail.jpg" alt="Watch the 2-minute TwiceShy demo on YouTube" width="760"></a>
+  <a href="https://youtu.be/NWAxSzs71Pc"><img src="docs/img/demo-thumbnail.jpg" alt="Watch the 2-minute TwiceShy demo on YouTube" width="760"></a>
 </p>
 
 <p align="center">
-  <a href="VIDEO_URL"><b>Watch the 2-minute demo</b></a>
+  <a href="https://youtu.be/NWAxSzs71Pc"><b>Watch the 2-minute demo</b></a>
   &nbsp;·&nbsp;
   <a href="BRIEF.md"><b>Read the one-page system and reliability brief</b></a>
   &nbsp;·&nbsp;
@@ -39,7 +39,7 @@
 
 | What you need | Where |
 |---|---|
-| Two-minute demo video | [YouTube](VIDEO_URL) |
+| Two-minute demo video | [YouTube](https://youtu.be/NWAxSzs71Pc) |
 | System and reliability brief | [BRIEF.md](BRIEF.md) (one page), full detail below |
 | Live eval results at the submitted code | [eval/results/2026-09-13T19-33-04-265Z/results.md](eval/results/2026-09-13T19-33-04-265Z/results.md) |
 | Live Slack session: a blocked approval and a real crash and resume | [docs/evidence/2026-09-13-live-slack-session](docs/evidence/2026-09-13-live-slack-session/README.md) |
@@ -297,6 +297,6 @@ Results, per-run JSON with every Stripe, HubSpot and Slack object ID, and every 
 
 ## Demo video
 
-<a href="VIDEO_URL"><img src="docs/img/demo-thumbnail.jpg" alt="Watch the 2-minute TwiceShy demo on YouTube" width="640"></a>
+<a href="https://youtu.be/NWAxSzs71Pc"><img src="docs/img/demo-thumbnail.jpg" alt="Watch the 2-minute TwiceShy demo on YouTube" width="640"></a>
 
-**[Watch the 2-minute demo on YouTube](VIDEO_URL)**
+**[Watch the 2-minute demo on YouTube](https://youtu.be/NWAxSzs71Pc)**

@@ -37,4 +37,4 @@ All numbers are from one live eval at the submitted code (commit 3f333da): 11 sc
 - The guard can only hold a promise Claude reports. Re-verification on Approve narrows the check-to-use window; it does not close it.
 - No automatic money reversal, and no Reject button.
 
-Full detail, architecture and sources: [README.md](README.md). Demo video: see the last section of the README.
+Full detail, architecture and sources: [README.md](README.md). Demo video: https://youtu.be/NWAxSzs71Pc
