@@ -1,9 +1,9 @@
 {
-  "name": "traceguard",
+  "name": "twiceshy",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Customer success agent that settles SLA credits exactly once across Slack, HubSpot, Linear and Stripe.",
+  "description": "TwiceShy: customer success agent that settles SLA credits exactly once across Slack, HubSpot, Linear and Stripe.",
   "engines": {
     "node": ">=20"
   },
