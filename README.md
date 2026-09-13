@@ -1,15 +1,21 @@
-<p align="center"><img src="docs/brand/twiceshy-lockup.svg" alt="TwiceShy" width="420"></p>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/brand/twiceshy-lockup-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="docs/brand/twiceshy-lockup-light.png">
+    <img src="docs/brand/twiceshy-lockup-light.png" alt="TwiceShy" width="420">
+  </picture>
+</p>
 
 # TwiceShy
 
 **TwiceShy pays each customer exactly once, even when a teammate got there first or the server crashes.**
 
 <p>
-  <img src="docs/brand/apps/slack.svg" alt="Slack" height="32">&nbsp;&nbsp;&nbsp;
-  <img src="docs/brand/apps/hubspot.svg" alt="HubSpot" height="32">&nbsp;&nbsp;&nbsp;
-  <img src="docs/brand/apps/linear.svg" alt="Linear" height="32">&nbsp;&nbsp;&nbsp;
-  <img src="docs/brand/apps/stripe.svg" alt="Stripe" height="32">&nbsp;&nbsp;&nbsp;
-  <img src="docs/brand/apps/claude.svg" alt="Claude" height="32">
+  <img src="docs/brand/apps/slack.png" alt="Slack" height="32">&nbsp;&nbsp;&nbsp;
+  <img src="docs/brand/apps/hubspot.png" alt="HubSpot" height="32">&nbsp;&nbsp;&nbsp;
+  <img src="docs/brand/apps/linear.png" alt="Linear" height="32">&nbsp;&nbsp;&nbsp;
+  <img src="docs/brand/apps/stripe.png" alt="Stripe" height="32">&nbsp;&nbsp;&nbsp;
+  <img src="docs/brand/apps/claude.png" alt="Claude" height="32">
 </p>
 
 Slack, HubSpot, Linear and Stripe, orchestrated by one Claude agent.
@@ -80,11 +86,11 @@ Approve claims the run in the ledger before anything else happens, so two clicks
 
 | App | What TwiceShy does there |
 |---|---|
-| <img src="docs/brand/apps/slack.svg" alt="Slack" height="20"> Slack | Reads the shared customer thread; posts the approval card in an internal channel over Socket Mode; replies to the customer |
-| <img src="docs/brand/apps/hubspot.svg" alt="HubSpot" height="20"> HubSpot | Finds the company, reads SLA tier, renewal date, contract value and Stripe customer ID; writes a note with the outcome |
-| <img src="docs/brand/apps/linear.svg" alt="Linear" height="20"> Linear | Reads incidents: severity, time window, affected accounts |
-| <img src="docs/brand/apps/stripe.svg" alt="Stripe" height="20"> Stripe (test mode) | Lists prior credits, credit notes and refunds; creates the customer balance credit |
-| <img src="docs/brand/apps/claude.svg" alt="Claude" height="20"> Claude API | Resolves the thread with tool use (model set by `ANTHROPIC_MODEL`, default `claude-haiku-4-5`) |
+| <img src="docs/brand/apps/slack.png" alt="Slack" height="20"> Slack | Reads the shared customer thread; posts the approval card in an internal channel over Socket Mode; replies to the customer |
+| <img src="docs/brand/apps/hubspot.png" alt="HubSpot" height="20"> HubSpot | Finds the company, reads SLA tier, renewal date, contract value and Stripe customer ID; writes a note with the outcome |
+| <img src="docs/brand/apps/linear.png" alt="Linear" height="20"> Linear | Reads incidents: severity, time window, affected accounts |
+| <img src="docs/brand/apps/stripe.png" alt="Stripe" height="20"> Stripe (test mode) | Lists prior credits, credit notes and refunds; creates the customer balance credit |
+| <img src="docs/brand/apps/claude.png" alt="Claude" height="20"> Claude API | Resolves the thread with tool use (model set by `ANTHROPIC_MODEL`, default `claude-haiku-4-5`) |
 
 ## How to run
 
