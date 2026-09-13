@@ -29,7 +29,7 @@ Researched 2026-09-13. Every quote below was read on the source page; quotes are
 5. **CNBC via NBC News, Sam Shead, 2021-12-31** (reputable press)
    https://www.nbcnews.com/business/business-news/bank-accidentally-deposits-176-million-peoples-accounts-christmas-day-rcna10538
    "Some payments from our corporate clients were incorrectly duplicated" (Santander statement)
-   About 75,000 payments, £130m, paid twice because of a "scheduling issue". Duplicate money movement happens at bank scale.
+   About 75,000 payments, £130m, paid twice because of a "scheduling issue". A different cause than a crash and retry; shown for scale only.
 
 ## Theme 3. SLA credits are manual and must be chased
 
@@ -50,7 +50,6 @@ Honest gap: I found no public post that describes a customer success team promis
 8. **OWASP GenAI Security Project, LLM06:2025 Excessive Agency** (primary guidance)
    https://genai.owasp.org/llmrisk/llm062025-excessive-agency/
    "require a human to approve high-impact actions before they are taken."
-   The same section asks that actions run "in the context of that specific user", which maps to TwiceShy's authority check.
 
 9. **AI Incident Database, Incident 1152, 2025-07-18** (curated incident record)
    https://incidentdatabase.ai/cite/1152/
