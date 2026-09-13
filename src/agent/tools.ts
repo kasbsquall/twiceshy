@@ -84,7 +84,7 @@ export const SUBMIT_TOOL: Anthropic.Tool = {
       kind: { type: 'string', enum: ['resolved', 'ambiguous'] },
       company_id: { type: ['string', 'null'], description: 'HubSpot company id, null when ambiguous.' },
       stripe_customer_id: { type: ['string', 'null'], description: 'Stripe customer id of that company, null when ambiguous.' },
-      incident_id: { type: ['string', 'null'], description: 'Linear incident id, null when ambiguous.' },
+      incident_id: { type: ['string', 'null'], description: 'Linear incident identifier as shown in tool results, for example AVA-6. Null when ambiguous.' },
       promise: {
         anyOf: [
           { type: 'null' },

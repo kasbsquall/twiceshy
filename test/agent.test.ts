@@ -69,6 +69,22 @@ describe('resolve agent', () => {
     expect(JSON.stringify(secondTurn?.content)).toContain('a thousand bucks');
   });
 
+  it('accepts the readable incident identifier and resolves it to the Linear id', async () => {
+    const client = scripted([toolUse('t1', 'submit_proposal', { ...submission, incident_id: 'INC-1' })]);
+    const result = await resolveThread(client, 'claude-sonnet-5', createMemoryApps(world()), thread);
+    expect(result.proposal).toMatchObject({ kind: 'resolved', incidentId: 'inc_1' });
+  });
+
+  it('asks the model again when it names an incident that does not exist', async () => {
+    const client = scripted([
+      toolUse('t1', 'submit_proposal', { ...submission, incident_id: 'INC-9' }),
+      toolUse('t2', 'submit_proposal', submission),
+    ]);
+    const result = await resolveThread(client, 'claude-sonnet-5', createMemoryApps(world()), thread);
+    expect(result.proposal).toMatchObject({ incidentId: 'inc_1' });
+    expect(result.usage.toolCalls[0]?.error).toMatch(/INC-9/);
+  });
+
   it('asks the model again when a submission is malformed', async () => {
     const client = scripted([
       toolUse('t1', 'submit_proposal', { ...submission, company_id: null }),

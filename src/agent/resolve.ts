@@ -76,6 +76,26 @@ function toProposal(input: SubmitInput): Proposal {
   };
 }
 
+const IDENTIFIER = /^[A-Z][A-Z0-9]*-\d+$/;
+
+/**
+ * Claude names incidents by their readable identifier (AVA-6). Long UUIDs were the one place the
+ * live eval saw it copy the wrong id while its own reasoning named the right incident.
+ */
+async function withIncidentIds(apps: Apps, proposal: Proposal): Promise<Proposal> {
+  const wanted = proposal.kind === 'resolved' ? [proposal.incidentId] : proposal.candidates.flatMap((c) => (c.incidentId ? [c.incidentId] : []));
+  if (!wanted.some((id) => IDENTIFIER.test(id))) return proposal;
+  const incidents = await apps.tracker.listIncidents();
+  const toId = (value: string): string => {
+    if (!IDENTIFIER.test(value)) return value;
+    const found = incidents.find((i) => i.identifier === value);
+    if (!found) throw new Error(`Linear has no incident ${value}`);
+    return found.id;
+  };
+  if (proposal.kind === 'resolved') return { ...proposal, incidentId: toId(proposal.incidentId) };
+  return { ...proposal, candidates: proposal.candidates.map((c) => (c.incidentId ? { ...c, incidentId: toId(c.incidentId) } : c)) };
+}
+
 function errorText(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
@@ -118,7 +138,7 @@ export async function resolveThread(client: ModelClient, model: string, apps: Ap
         const parsed = submitSchema.safeParse(block.input);
         try {
           if (!parsed.success) throw new Error(parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; '));
-          const proposal = toProposal(parsed.data);
+          const proposal = await withIncidentIds(apps, toProposal(parsed.data));
           usage.toolCalls.push({ name: block.name, input: block.input });
           return { proposal, usage };
         } catch (error) {
