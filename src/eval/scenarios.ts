@@ -33,18 +33,21 @@ export const COMPANIES: CompanySeed[] = [
   { key: 'wayne', name: 'Wayne Retail', slaTier: 'premium', renewalDate: '2026-10-18', annualValueMinor: 5_400_000 },
   { key: 'vandelay_imports', name: 'Vandelay Imports', slaTier: 'premium', renewalDate: '2026-11-02', annualValueMinor: 2_400_000 },
   { key: 'vandelay_industries', name: 'Vandelay Industries', slaTier: 'premium', renewalDate: '2027-04-20', annualValueMinor: 2_400_000 },
+  { key: 'northwind', name: 'Northwind Analytics', slaTier: 'enterprise', renewalDate: '2026-10-30', annualValueMinor: 18_000_000 },
+  { key: 'pied_piper', name: 'Pied Piper', slaTier: 'premium', renewalDate: '2026-11-12', annualValueMinor: 3_000_000 },
+  { key: 'soylent', name: 'Soylent Foods', slaTier: 'premium', renewalDate: '2026-12-15', annualValueMinor: 4_200_000 },
 ];
 
 export const INCIDENTS: IncidentSeed[] = [
   {
     key: 'checkout_outage', title: 'Checkout API outage', summary: 'Checkout API returned 5xx for EU and US tenants.',
     severity: 'sev1', startedAt: '2026-09-08T14:00:00Z', resolvedAt: '2026-09-08T17:10:00Z',
-    affected: ['acme_inc', 'umbrella', 'wayne', 'vandelay_imports', 'vandelay_industries'],
+    affected: ['acme_inc', 'umbrella', 'wayne', 'vandelay_imports', 'vandelay_industries', 'northwind', 'soylent'],
   },
   {
     key: 'webhook_delay', title: 'Webhook delivery delays', summary: 'Webhooks delayed up to 40 minutes.',
     severity: 'sev2', startedAt: '2026-09-10T09:00:00Z', resolvedAt: '2026-09-10T11:30:00Z',
-    affected: ['acme_corp', 'globex', 'initech', 'stark'],
+    affected: ['acme_corp', 'globex', 'initech', 'stark', 'pied_piper'],
   },
   {
     key: 'login_outage', title: 'Dashboard login outage', summary: 'SSO logins failed for all tenants.',
@@ -58,10 +61,13 @@ export const INCIDENTS: IncidentSeed[] = [
   },
 ];
 
-export type Speaker = 'customer' | 'csm';
+/** csm is a real internal Slack user; customer and teammate lines are posted by the app under a display name. */
+export type Speaker = 'customer' | 'csm' | 'teammate';
 
 export interface ThreadLine {
   speaker: Speaker;
+  /** Display name for customer and teammate lines; defaults to the scenario customer. */
+  name?: string;
   text: string;
 }
 
@@ -197,5 +203,47 @@ export const SCENARIOS: Scenario[] = [
       { speaker: 'csm', text: 'Sorry about that, we will credit you $1,000.' },
     ],
     expected: { status: 'HOLD', reason: 'AMBIGUOUS', ambiguous: true },
+  },
+  {
+    id: 's9-role-cap',
+    owedMinor: 250000,
+    title: 'Several people on the customer side, CSM promises above their limit',
+    writtenBy: 'Claude, fictional personas',
+    customerName: 'Hana Ito (Northwind)',
+    companies: ['northwind'],
+    thread: [
+      { speaker: 'customer', name: 'Hana Ito (Northwind, VP Operations)', text: 'Tuesday afternoon your checkout API was down for three hours. Our renewal conversation is next month and this is going to come up.' },
+      { speaker: 'customer', name: 'Omar Haddad (Northwind, Platform)', text: 'For the record we logged 5xx from 14:02 to 17:08 UTC.' },
+      { speaker: 'csm', text: 'Hana, Omar, thank you, and I am sorry. Your enterprise plan covers this, so we are crediting $2,500.' },
+    ],
+    expected: { status: 'HOLD', reason: 'AMOUNT_ABOVE_ROLE_CAP', company: 'northwind', incident: 'checkout_outage', amountMinor: 250_000 },
+  },
+  {
+    id: 's10-sales-promise',
+    owedMinor: 50000,
+    title: 'A sales teammate promises money, the CSM takes over without confirming',
+    writtenBy: 'Claude, fictional personas',
+    customerName: 'Laurie Bream (Pied Piper)',
+    companies: ['pied_piper'],
+    thread: [
+      { speaker: 'customer', text: 'Thursday morning every webhook arrived 40 minutes late. Our users noticed before we did.' },
+      { speaker: 'teammate', name: 'Jordan Lee (Account Executive)', text: 'Laurie, that is on us. I will make sure you get $2,000 back for it.' },
+      { speaker: 'csm', text: 'Hi Laurie, taking this over from Jordan so it gets handled properly. Checking your contract now.' },
+    ],
+    expected: { status: 'HOLD', reason: 'PROMISE_NOT_AUTHORIZED', company: 'pied_piper', incident: 'webhook_delay' },
+  },
+  {
+    id: 's11-wrong-plan-claim',
+    owedMinor: 100000,
+    title: 'Customer claims a higher plan and mentions a second incident that did not affect them',
+    writtenBy: 'Claude, fictional personas',
+    customerName: 'Grace Kim (Soylent)',
+    companies: ['soylent'],
+    thread: [
+      { speaker: 'customer', name: 'Grace Kim (Soylent, Ops)', text: 'The Tuesday checkout outage cost us the lunch rush. We are on Enterprise, so we expect the enterprise credit.' },
+      { speaker: 'customer', name: 'Ben Ortiz (Soylent, Finance)', text: 'There was also the webhook delay on Thursday, but that one did not touch our account.' },
+      { speaker: 'csm', text: 'Grace, Ben, I checked your contract: you are on Premium, which gives you $1,000 for the Tuesday checkout outage. That is what we will credit.' },
+    ],
+    expected: { status: 'PASS', company: 'soylent', incident: 'checkout_outage', amountMinor: 100_000 },
   },
 ];

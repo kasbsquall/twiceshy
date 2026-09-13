@@ -34,7 +34,7 @@ function world(scenarioId: string): { state: MemoryState; proposal: Proposal } {
     ts: `17893000${n}0.000100`,
     threadTs: THREAD.threadTs,
     userId: line.speaker === 'csm' ? CSM : 'bot:B_OFFLINE',
-    ...(line.speaker === 'customer' ? { authorName: scenario.customerName } : {}),
+    ...(line.speaker !== 'csm' ? { authorName: line.name ?? scenario.customerName } : {}),
     text: line.text,
   }));
   state.threads[THREAD.threadTs]![0]!.ts = THREAD.threadTs;

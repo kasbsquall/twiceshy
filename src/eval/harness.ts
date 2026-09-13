@@ -24,8 +24,8 @@ export async function postThread(apps: LiveApps, userToken: string, channelId: s
   let threadTs: string | undefined;
   for (const line of scenario.thread) {
     let ts: string;
-    if (line.speaker === 'customer') {
-      ts = (await apps.chat.postMessage(channelId, line.text, { username: scenario.customerName, ...(threadTs ? { threadTs } : {}) })).ts;
+    if (line.speaker !== 'csm') {
+      ts = (await apps.chat.postMessage(channelId, line.text, { username: line.name ?? scenario.customerName, ...(threadTs ? { threadTs } : {}) })).ts;
     } else {
       const result = await asCsm.chat.postMessage({ channel: channelId, text: line.text, ...(threadTs ? { thread_ts: threadTs } : {}) });
       if (!result.ts) throw new Error('Slack did not return ts for the CSM message');
