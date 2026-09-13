@@ -15,6 +15,7 @@ export function liveDeps(config: LiveConfig, apps: LiveApps = createLiveApps(con
     cases: new CaseStore(join(DEMO_DIR, 'cases')),
     internalUsers: config.internalUsers,
     approverUserIds: config.approverUserIds,
+    allowSelfApproval: config.allowSelfApproval,
     approvalChannelId: config.slackApprovalChannelId,
     postCards: true,
   };

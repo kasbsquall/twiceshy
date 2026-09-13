@@ -82,6 +82,15 @@ describe('workflow', () => {
     expect(replies(state)).toHaveLength(1);
   });
 
+  it('refuses approval from the person who made the promise', async () => {
+    const { state, deps, resolver } = setup();
+    const withCsm: WorkflowDeps = { ...deps, approverUserIds: new Set(['U_MANAGER', CSM]) };
+    const record = await prepareCase(withCsm, thread, resolver);
+    expect(await approveCase(withCsm, record.runId, CSM)).toEqual({ status: 'self_approval' });
+    expect(ours(state)).toHaveLength(0);
+    expect((await approveCase(withCsm, record.runId, 'U_MANAGER')).status).toBe('done');
+  });
+
   it('refuses approval from someone outside the allowlist', async () => {
     const { deps, resolver } = setup();
     const record = await prepareCase(deps, thread, resolver);

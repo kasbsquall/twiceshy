@@ -21,6 +21,7 @@ const liveSchema = z.object({
   HUBSPOT_ACCESS_TOKEN: z.string().min(1),
   LINEAR_API_KEY: z.string().min(1),
   LINEAR_TEAM_KEY: z.string().min(1).default('INC'),
+  ALLOW_SELF_APPROVAL: z.enum(['true', 'false']).default('false'),
 });
 
 export interface LiveConfig {
@@ -36,6 +37,7 @@ export interface LiveConfig {
   slackApprovalChannelId: string;
   internalUsers: ReadonlyMap<string, Role>;
   approverUserIds: ReadonlySet<string>;
+  allowSelfApproval: boolean;
   hubspotAccessToken: string;
   linearApiKey: string;
   linearTeamKey: string;
@@ -71,6 +73,7 @@ export function loadLiveConfig(env: NodeJS.ProcessEnv = process.env): LiveConfig
     slackApprovalChannelId: e.SLACK_APPROVAL_CHANNEL_ID,
     internalUsers: parseInternalUsers(e.INTERNAL_SLACK_USERS),
     approverUserIds: new Set(e.APPROVER_SLACK_USER_IDS.split(',').map((s) => s.trim()).filter(Boolean)),
+    allowSelfApproval: e.ALLOW_SELF_APPROVAL === 'true',
     hubspotAccessToken: e.HUBSPOT_ACCESS_TOKEN,
     linearApiKey: e.LINEAR_API_KEY,
     linearTeamKey: e.LINEAR_TEAM_KEY,

@@ -16,7 +16,8 @@
     "eval": "tsx src/eval/runEval.ts --k 3",
     "eval:quick": "tsx src/eval/runEval.ts --k 1",
     "seed": "tsx src/eval/seed.ts",
-    "replay": "tsx src/cli.ts replay"
+    "replay": "tsx src/cli.ts replay",
+    "resolve": "tsx src/cli.ts resolve"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.125.0",

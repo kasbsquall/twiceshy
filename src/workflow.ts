@@ -16,6 +16,8 @@ export interface WorkflowDeps {
   cases: CaseStore;
   internalUsers: ReadonlyMap<string, Role>;
   approverUserIds: ReadonlySet<string>;
+  /** Let the author of a promise approve it. Only for a workspace with one real person in it. */
+  allowSelfApproval?: boolean;
   approvalChannelId: string;
   /** Post and update Slack cards. Off in eval runs that do not need them. */
   postCards: boolean;
@@ -112,7 +114,7 @@ export async function prepareCase(deps: WorkflowDeps, thread: ThreadLocation, re
 }
 
 export type ApproveResult =
-  | { status: 'forbidden' | 'not_approvable' | 'already_done' }
+  | { status: 'forbidden' | 'self_approval' | 'not_approvable' | 'already_done' }
   | { status: 'blocked' | 'done' | 'failed'; record: CaseRecord };
 
 /** Approve: re-read every app, re-run all checks plus the stale-state diff, then execute. */
@@ -122,6 +124,7 @@ export async function approveCase(deps: WorkflowDeps, runId: string, approverUse
   if (!record || record.verdict.status !== 'PASS' || record.proposal?.kind !== 'resolved' || !record.snapshot) {
     return { status: 'not_approvable' };
   }
+  if (!deps.allowSelfApproval && record.proposal.promise?.authorUserId === approverUserId) return { status: 'self_approval' };
   if (record.outcome || deps.ledger.hasStatus(runId, 'run', 'intent')) return { status: 'already_done' };
   // Claim the run before any await: two clicks on the same card cannot both pass this line.
   deps.ledger.append({ runId, step: 'run', status: 'intent', detail: `approval started by ${approverUserId}` });

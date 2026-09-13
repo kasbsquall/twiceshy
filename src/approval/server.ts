@@ -45,6 +45,9 @@ async function main(): Promise<void> {
     if (result.status === 'forbidden' && body.channel?.id) {
       await client.chat.postEphemeral({ channel: body.channel.id, user: userId, text: 'Only approvers listed in APPROVER_SLACK_USER_IDS can approve credits.' });
     }
+    if (result.status === 'self_approval' && body.channel?.id) {
+      await client.chat.postEphemeral({ channel: body.channel.id, user: userId, text: 'You made this promise in the thread, so someone else has to approve it.' });
+    }
   });
 
   await app.start();

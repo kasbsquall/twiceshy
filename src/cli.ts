@@ -63,6 +63,25 @@ async function demo(): Promise<void> {
   out('Start `npm run approvals` (add `-- --crash-after hubspot_note` to kill it mid-run) and press Approve in Slack.');
 }
 
+/** Runs TwiceShy on a thread that already exists in Slack and posts the card. */
+async function resolveExisting(): Promise<void> {
+  const channelId = arg('channel');
+  const threadTs = arg('ts');
+  if (!channelId || !threadTs) throw new Error('Usage: npm run resolve -- --channel C0123ABC --ts 1789327602.757069 (the ts of the first message in the thread)');
+  const [{ loadLiveConfig }, { liveDeps }, { anthropicClient, resolveThread }, { prepareCase }] = await Promise.all([
+    import('./config.js'),
+    import('./liveDeps.js'),
+    import('./agent/resolve.js'),
+    import('./workflow.js'),
+  ]);
+  const config = loadLiveConfig();
+  const client = anthropicClient(config.anthropicApiKey);
+  out('Claude is reading Slack, HubSpot, Linear and Stripe...');
+  const record = await prepareCase(liveDeps(config), { channelId, threadTs }, (apps, t) => resolveThread(client, config.anthropicModel, apps, t));
+  out(`Verdict ${record.verdict.status} [${record.verdict.reasons.join(', ')}]. Card posted in the approvals channel.`);
+  out(`Run id: ${record.runId}`);
+}
+
 /** Prints what the agent read, decided and wrote for one run, from the case file and the ledger. */
 async function replay(): Promise<void> {
   const runId = process.argv[3];
@@ -96,7 +115,7 @@ async function replay(): Promise<void> {
 }
 
 const command = process.argv[2];
-(command === 'replay' ? replay() : demo()).catch((error: unknown) => {
+(command === 'replay' ? replay() : command === 'resolve' ? resolveExisting() : demo()).catch((error: unknown) => {
   process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
   process.exit(1);
 });

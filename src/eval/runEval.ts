@@ -110,6 +110,7 @@ async function runOne(
         cases: new CaseStore(join(dir, 'cases')),
         internalUsers: config.internalUsers,
         approverUserIds: config.approverUserIds,
+        allowSelfApproval: config.allowSelfApproval,
         approvalChannelId: config.slackApprovalChannelId,
         postCards: false,
       });
