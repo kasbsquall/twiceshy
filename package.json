@@ -1,0 +1,38 @@
+{
+  "name": "traceguard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Customer success agent that settles SLA credits exactly once across Slack, HubSpot, Linear and Stripe.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "demo": "tsx src/cli.ts demo",
+    "demo:offline": "tsx src/cli.ts demo --offline",
+    "approvals": "tsx src/approval/server.ts",
+    "eval": "tsx src/eval/runEval.ts --k 3",
+    "eval:quick": "tsx src/eval/runEval.ts --k 1",
+    "seed": "tsx src/eval/seed.ts",
+    "replay": "tsx src/cli.ts replay"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest",
+    "@hubspot/api-client": "latest",
+    "@linear/sdk": "latest",
+    "@slack/bolt": "latest",
+    "@slack/web-api": "latest",
+    "dotenv": "latest",
+    "p-limit": "latest",
+    "stripe": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "tsx": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
+  }
+}
