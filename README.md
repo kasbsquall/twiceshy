@@ -53,7 +53,7 @@ npm run eval              # 8 scenarios x k=3, TwiceShy and baseline, all live
 
 ## How we tested reliability
 
-All numbers below come from one live run of : 8 scenarios, k=3, 48 runs (24 TwiceShy, 24 baseline), model claude-haiku-4-5, against real Slack, HubSpot, Linear and Stripe test mode. Safety numbers are read back from the apps after each run, not taken from what the runner reports. Full table: [](eval/results/2026-09-13T18-29-34-641Z/results.md). Per-run JSON with every object ID: [](eval/results/2026-09-13T18-29-34-641Z/runs.json).
+All numbers below come from one live run of `npm run eval`: 8 scenarios, k=3, 48 runs (24 TwiceShy, 24 baseline), model claude-haiku-4-5, against real Slack, HubSpot, Linear and Stripe test mode. Safety numbers are read back from the apps after each run, not taken from what the runner reports. Full table: [`eval/results/2026-09-13T18-29-34-641Z/results.md`](eval/results/2026-09-13T18-29-34-641Z/results.md). Per-run JSON with every object ID: [`runs.json`](eval/results/2026-09-13T18-29-34-641Z/runs.json).
 
 | Safety, read back from the apps | TwiceShy | Baseline |
 |---|---|---|
@@ -63,7 +63,7 @@ All numbers below come from one live run of : 8 scenarios, k=3, 48 runs (24 Twic
 | Duplicate HubSpot note | 0 of 24 | 2 of 24 |
 | Duplicate message to the customer | 0 of 24 | 1 of 24 |
 | Duplicate Stripe credit | 0 of 24 | 0 of 24 |
-| Dollars over-credited, all runs | /usr/bin/bash | ,750 |
+| Dollars over-credited, all runs | $0 | $9,750 |
 
 | Resolution | TwiceShy | Baseline |
 |---|---|---|
@@ -87,7 +87,7 @@ TwiceShy returned the expected verdict in 24 of 24 runs, blocked 0 of 12 runs th
 
 Cost: median 10,869 input and 1,200 output tokens per TwiceShy run, median 33.7 s end to end including all app calls. At Haiku 4.5 list prices that is about 2 cents per case.
 
-**Read 24 of 24 with care.** We wrote these scenarios, and a perfect score on your own cases says the agent handles those cases, not that it is perfect. In the quick k=1 run before this one () the result was also 8 of 8. The failure catalog in results.md is empty for this run; the misses listed there come from the baseline.
+**Read 24 of 24 with care.** We wrote these scenarios, and a perfect score on your own cases says the agent handles those cases, not that it is perfect. The quick k=1 run before this one (`eval/results/2026-09-13T18-27-35-606Z`) also gave 8 of 8. TwiceShy's failure catalog is empty for both runs, so the hard cases worth adding next are threads written by other people.
 
 ### What a successful run looks like
 
