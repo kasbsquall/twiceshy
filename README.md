@@ -244,7 +244,7 @@ Cost: median 12,983 input and 1,123 output tokens per TwiceShy run, about 2 cent
 
 In the 66-run eval, the s7 runs stop in-process right after each write has been recorded, then a new runner instance resumes from the ledger on disk. That proves the ledger replay, not the harder case.
 
-So we ran s7 again live with `--lost-response` (3 runs, [`eval/results/2026-09-13T19-17-51-324Z`](eval/results/2026-09-13T19-17-51-324Z/results.md)). Each run stops after Stripe, HubSpot or Slack accepted the write but before the ledger recorded it. The ledger only says `intent`, so the resumed runner has to find the object in the real app by run ID. In all 3 runs it did: the ledger line reads `reconciled after interruption` with the real object ID (a Stripe balance transaction, a HubSpot note, a Slack message), and the read-back shows exactly one credit, one note and one reply.
+So we ran s7 again live with `--lost-response` (3 runs, [`eval/results/2026-09-13T19-17-51-324Z`](eval/results/2026-09-13T19-17-51-324Z/results.md)). Each run stops after Stripe, HubSpot or Slack accepted the write but before the ledger recorded it. The ledger only says `intent`, so the resumed runner has to find the object in the real app by run ID. In all 3 runs it did: the ledger line reads `reconciled after interruption` with the real object ID (a Stripe balance transaction, a HubSpot note, a Slack message), and the read-back shows exactly one credit, one note and one reply. These runs are at commit 5d89475, before the incident identifier fix; `src/runner.ts` and the lookup code did not change between that commit and 3f333da.
 
 The same thing through the real Slack path, with a click on Approve, a killed server and a restart, is logged in [docs/evidence/2026-09-13-live-slack-session](docs/evidence/2026-09-13-live-slack-session/README.md), together with a run where a teammate credited first and Approve stopped.
 
@@ -269,7 +269,7 @@ The approval card in Slack opens with **Approve $1,000 credit to Acme Inc**. Und
 
 After Approve, the same card reads **Credited $1,000 to Acme Inc** and "Added the $1,000 credit in Stripe, logged a HubSpot note and posted the reply." A receipt in the thread lists the three object IDs, and says "Resumed after an interruption; nothing was done twice." when the process was killed in between.
 
-When a teammate credits Acme by hand in the Stripe dashboard after the card is posted, Approve moves no money and the card turns into **Stopped: Acme Inc was already credited $1,000**, with "Nothing was credited and no reply was sent. Acme Inc already received a $1,000 credit in Stripe at 15:42 UTC, after this card was posted."
+When a teammate credits Acme by hand in the Stripe dashboard after the card is posted, Approve moves no money and the card turns into **Stopped: Acme Inc was already credited $1,000**, with "Nothing was credited and no reply was sent. Acme Inc already received a $1,000 credit in Stripe at 20:22 UTC, after this card was posted." (screenshot at the top of this README).
 
 ### Limitations
 
@@ -282,6 +282,7 @@ When a teammate credits Acme by hand in the Stripe dashboard after the card is p
 - The verifier checks IDs and the promise quote. The evidence quotes Claude attaches for HubSpot and Linear are shown to no one and not checked. When one company was hit by two incidents, which one the thread means is Claude's call, checked only by the human on the card.
 - Any Stripe credit without TwiceShy metadata created after the incident started counts as a manual credit for it. A goodwill credit for something unrelated would block the case, and a person has to look.
 - Re-verification on Approve narrows the window between check and use; it does not close it. A credit made in the milliseconds between our re-read and our Stripe call would not be caught.
+- The ledger is a local JSONL file. Claiming a run protects against a double click and a restart on one host; two approval servers on different machines would need a shared store.
 - Lookup by run ID after a crash depends on each app returning what we created: Stripe balance transactions for the customer, HubSpot notes associated with the company, Slack thread replies with message metadata. We use list endpoints, never Stripe Search, which indexes with a delay. HubSpot company search lists every company and filters in code, which is fine for a demo portal and slow for a large one.
 - There is no automatic money reversal. If a later step fails permanently after the credit, the card says so with the Stripe object ID. There is no Reject button; a card nobody approves stays open.
 - The HubSpot renewal dates and contract values are demo data.

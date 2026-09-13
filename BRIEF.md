@@ -10,7 +10,7 @@ After an outage, customer success teams promise SLA credits in shared Slack thre
 2. **Code verifies.** Every ID must exist, HubSpot must link the company to the Stripe customer, the incident must list the company as affected, and the promise quote must appear verbatim in the stated message by the stated author.
 3. **Policy sets the money.** SLA tier from HubSpot times severity from Linear. Role caps apply to promises.
 4. **A guard returns PASS, HOLD or BLOCK** (duplicate credit, amount vs policy, promise authority, account identity), and posts a card in Slack.
-5. **A human approves in Slack.** Never the author of the promise. On Approve, TwiceShy re-reads Stripe, HubSpot and Linear and stops if anything changed.
+5. **A human approves in Slack.** By default never the author of the promise (the one-person demo workspace allows it, see Limitations). On Approve, TwiceShy re-reads Stripe, HubSpot and Linear and stops if anything changed.
 6. **A crash-safe runner** writes the Stripe credit, the HubSpot note and the Slack reply once each: a fsynced write-ahead ledger, the run ID on every object, and lookup by run ID after a restart.
 
 ## Reliability
@@ -25,7 +25,7 @@ All numbers are from one live eval at the submitted code (commit 3f333da): 11 sc
 | Dollars over-credited | $0 | $9,750 |
 | Duplicate Stripe credits | 0 | 0 (its idempotency key works) |
 
-- **Real crash, live.** The server is killed after Stripe accepted the credit but before the ledger recorded it. On restart it found the credit in Stripe by run ID: 3 of 3 live runs with one credit, one note, one reply ([eval](eval/results/2026-09-13T19-17-51-324Z/results.md)), plus one run through the real Slack button ([evidence](docs/evidence/2026-09-13-live-slack-session/README.md)).
+- **Real crash, live.** The server is killed after Stripe accepted the credit but before the ledger recorded it. On restart it found the credit in Stripe by run ID: 3 of 3 live runs with one credit, one note, one reply ([eval](eval/results/2026-09-13T19-17-51-324Z/results.md), at commit 5d89475; the runner did not change before 3f333da), plus one run through the real Slack button ([evidence](docs/evidence/2026-09-13-live-slack-session/README.md)).
 - **Teammate race, live.** A credit made by hand after the card was posted: Approve stopped, nothing was credited, no reply was sent ([evidence](docs/evidence/2026-09-13-live-slack-session/README.md)).
 - **CI** runs 32 tests on every push, including a child process that exits with code 137 at four points, and two offline demos that need no keys.
 - **Failure found and fixed today.** Claude once submitted the wrong incident ID while its reasoning named the right one; the guard blocked it. Claude now submits the readable identifier and code maps it. Re-run: 9 of 9, then 33 of 33 in the full eval.
@@ -35,6 +35,7 @@ All numbers are from one live eval at the submitted code (commit 3f333da): 11 sc
 - The eval threads were written by us, and each guard check has a scenario built for it. The sample is small (k=3).
 - The workspace has one real person, so the eval and demo allow self-approval; the default blocks it. The eval calls the approval function directly; the Slack button path is shown in the logged live session and the video.
 - The guard can only hold a promise Claude reports. Re-verification on Approve narrows the check-to-use window; it does not close it.
+- The ledger is a local file, so run claiming holds on one host only.
 - No automatic money reversal, and no Reject button.
 
 Full detail, architecture and sources: [README.md](README.md). Demo video: https://youtu.be/NWAxSzs71Pc
