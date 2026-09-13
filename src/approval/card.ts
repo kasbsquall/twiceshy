@@ -22,7 +22,7 @@ export function renewalLine(snapshot: CaseSnapshot, now: Date): string {
 /** The message the customer will read. Fixed template: no model text reaches the customer. */
 export function customerReply(snapshot: CaseSnapshot, creditMinor: Cents): string {
   const { company, incident } = snapshot;
-  return `Thanks for your patience with the ${incident.title.toLowerCase()} on ${shortDate(incident.startedAt)}. We have added a ${formatUsd(creditMinor)} credit to the ${company.name} account, and it will apply to your next invoice. Sorry again for the disruption.`;
+  return `Thanks for your patience with the ${incident.title} on ${shortDate(incident.startedAt)}. We have added a ${formatUsd(creditMinor)} credit to the ${company.name} account, and it will apply to your next invoice. Sorry again for the disruption.`;
 }
 
 /** One sentence built from verified records and code-run searches, never from model prose. */
@@ -46,16 +46,20 @@ function headline(record: CaseRecord, now: Date): string {
   if (!snapshot || verdict.creditMinor === null) return 'The agent could not settle this thread. It needs a person.';
   const action = `a ${formatUsd(verdict.creditMinor)} credit to ${snapshot.company.name} for the ${shortDate(snapshot.incident.startedAt)} outage (${snapshot.incident.identifier})`;
   const renewal = renewalLine(snapshot, now);
+  if (record.outcome?.status === 'done') return `Paid ${action.slice(2)}. ${renewal}`.trim();
   if (verdict.status === 'PASS') return `Approve ${action}. ${renewal}`.trim();
   if (verdict.status === 'HOLD') return `Needs a manager: ${action}. ${renewal}`.trim();
   return `Blocked: ${action}. ${renewal}`.trim();
 }
 
 function riskLine(record: CaseRecord): string {
-  const failing = record.verdict.checks.filter((c) => !c.ok);
+  let failing = record.verdict.checks.filter((c) => !c.ok);
   if (record.verdict.status === 'PASS') return '';
   const prefix = record.verdict.status === 'BLOCK' ? 'Do not approve: ' : 'Why it is on hold: ';
-  if (failing.length > 0) return prefix + failing.map((c) => c.detail).join(' ');
+  // A credit that is both a duplicate and new since the card was posted is one fact, said once.
+  const lateDuplicate = failing.some((c) => c.check === 'duplicate_credit') && failing.some((c) => c.check === 'stale_state');
+  if (lateDuplicate) failing = failing.filter((c) => c.check !== 'stale_state');
+  if (failing.length > 0) return prefix + failing.map((c) => c.detail).join(' ') + (lateDuplicate ? ' That credit was made after this card was posted.' : '');
   if (record.verificationDetail) return prefix + record.verificationDetail;
   if (record.verdict.reasons.includes('INCIDENT_NOT_ELIGIBLE')) return `${prefix}this incident does not qualify for an SLA credit under the policy.`;
   return prefix + record.verdict.reasons.join(', ');
@@ -75,7 +79,9 @@ export interface Card {
 const section = (text: string) => ({ type: 'section', text: { type: 'mrkdwn', text } });
 const context = (text: string) => ({ type: 'context', elements: [{ type: 'mrkdwn', text }] });
 
-export function buildCard(record: CaseRecord, now: Date = new Date()): Card {
+export function buildCard(original: CaseRecord, now: Date = new Date()): Card {
+  // After Approve, the card shows the re-check, not the verdict from when it was posted.
+  const record: CaseRecord = original.approval ? { ...original, verdict: original.approval.verdict } : original;
   const top = headline(record, now);
   const blocks: unknown[] = [section(`*${top}*`)];
   const risk = riskLine(record);
@@ -89,7 +95,8 @@ export function buildCard(record: CaseRecord, now: Date = new Date()): Card {
   }
 
   if (record.snapshot && record.verdict.creditMinor !== null && record.verdict.status !== 'BLOCK') {
-    blocks.push(section(`*Reply the customer will get:*\n>${customerReply(record.snapshot, record.verdict.creditMinor)}`));
+    const label = record.outcome?.status === 'done' ? 'Reply sent to the customer' : 'Reply the customer will get';
+    blocks.push(section(`*${label}:*\n>${customerReply(record.snapshot, record.verdict.creditMinor)}`));
   }
 
   const checks = checksLine(record.verdict.checks);
@@ -112,7 +119,7 @@ export function outcomeLine(record: CaseRecord): string {
   const outcome = record.outcome;
   if (!outcome) return '';
   const who = record.approval ? `<@${record.approval.userId}>` : 'Someone';
-  if (outcome.status === 'blocked') return `${who} pressed Approve. TwiceShy re-checked the apps and stopped: ${outcome.detail ?? outcome.reasons.join(', ')}`;
+  if (outcome.status === 'blocked') return `${who} pressed Approve. TwiceShy re-read Stripe, HubSpot and Linear first and stopped. Nothing was paid and no reply was sent.`;
   if (outcome.status === 'failed') return `Approved by ${who}, but execution stopped: ${outcome.detail ?? 'unknown error'}. A person needs to look.`;
   const resumed = outcome.resumed.length > 0 ? ' Resumed after interruption, nothing was done twice.' : '';
   return `Approved by ${who}. Paid ${outcome.creditMinor === null ? '' : formatUsd(outcome.creditMinor)} once.${resumed}`;

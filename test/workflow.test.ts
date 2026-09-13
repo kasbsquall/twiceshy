@@ -86,7 +86,12 @@ describe('workflow', () => {
     expect(result.status).toBe('blocked');
     expect(ours(state)).toHaveLength(0);
     expect(replies(state)).toHaveLength(0);
-    if (result.status === 'blocked') expect(buildCard(result.record).blocks.map((b) => JSON.stringify(b)).join()).toContain('pay them twice');
+    if (result.status === 'blocked') {
+      const card = buildCard(result.record);
+      expect(card.text.startsWith('Blocked:')).toBe(true);
+      expect(card.blocks.map((b) => JSON.stringify(b)).join()).toContain('pay them twice');
+      expect(card.blocks.map((b) => JSON.stringify(b)).join()).not.toContain('Reply the customer will get');
+    }
   });
 
   it('resumes after a crash mid-run without paying or replying twice', async () => {

@@ -1,0 +1,159 @@
+{
+  "runId": "run_mu06st1e_b9ad4a",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789326517.695179"
+  },
+  "createdAt": "2026-09-13T19:08:57.035Z",
+  "proposal": {
+    "kind": "resolved",
+    "companyId": "58445344385",
+    "stripeCustomerId": "cus_VFoOVbpNjQW6Y3",
+    "incidentId": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+    "promise": {
+      "amountMinor": 100000,
+      "currency": "usd",
+      "authorUserId": "U0C1MHQB4KE",
+      "messageTs": "1789326517.856689",
+      "quote": "a thousand bucks in credit on your account"
+    },
+    "reasoning": "Acme Inc is the company mentioned in the thread (Dana Ruiz), which matches the Checkout API outage (AVA-6) that affected them. The team promised $1,000 in credit.\"",
+    "evidence": [
+      {
+        "app": "slack",
+        "id": "1789326517.695179",
+        "quote": "the outage on Tuesday afternoon took our checkout down"
+      },
+      {
+        "app": "slack",
+        "id": "1789326517.856689",
+        "quote": "we'll make it right with a thousand bucks in credit on your account"
+      },
+      {
+        "app": "hubspot",
+        "id": "58445344385",
+        "quote": "Acme Inc"
+      },
+      {
+        "app": "linear",
+        "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+        "quote": "Checkout API outage"
+      }
+    ]
+  },
+  "verdict": {
+    "status": "PASS",
+    "reasons": [],
+    "checks": [
+      {
+        "check": "duplicate_credit",
+        "ok": true,
+        "detail": "No credit issued yet for this incident",
+        "evidence": []
+      },
+      {
+        "check": "amount_vs_policy",
+        "ok": true,
+        "detail": "Promise matches policy: $1,000",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789326517.856689",
+            "quote": "a thousand bucks in credit on your account"
+          }
+        ]
+      },
+      {
+        "check": "promise_authority",
+        "ok": true,
+        "detail": "Promise written by an internal team member",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789326517.856689"
+          }
+        ]
+      },
+      {
+        "check": "account_identity",
+        "ok": true,
+        "detail": "Acme Inc matches across HubSpot, Stripe and AVA-6",
+        "evidence": [
+          {
+            "app": "hubspot",
+            "id": "58445344385"
+          },
+          {
+            "app": "stripe",
+            "id": "cus_VFoOVbpNjQW6Y3"
+          },
+          {
+            "app": "linear",
+            "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad"
+          }
+        ]
+      }
+    ],
+    "creditMinor": 100000
+  },
+  "snapshot": {
+    "company": {
+      "id": "58445344385",
+      "name": "Acme Inc",
+      "slaTier": "premium",
+      "renewalDate": "2026-10-24",
+      "annualValueMinor": 4800000,
+      "stripeCustomerId": "cus_VFoOVbpNjQW6Y3"
+    },
+    "incident": {
+      "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+      "identifier": "AVA-6",
+      "title": "Checkout API outage",
+      "severity": "sev1",
+      "startedAt": "2026-09-08T14:00:00Z",
+      "resolvedAt": "2026-09-08T17:10:00Z",
+      "affectedCompanyIds": [
+        "58445344385",
+        "58426002498",
+        "58424616243",
+        "58413899317",
+        "58420738851",
+        "58430945350",
+        "58433412938"
+      ]
+    },
+    "thread": [
+      {
+        "ts": "1789326517.695179",
+        "threadTs": "1789326517.695179",
+        "userId": "bot:B0C1MJ65DAQ",
+        "authorName": "Dana Ruiz (Acme)",
+        "text": "Hi team, the outage on Tuesday afternoon took our checkout down for about three hours. That hurt."
+      },
+      {
+        "ts": "1789326517.856689",
+        "threadTs": "1789326517.695179",
+        "userId": "U0C1MHQB4KE",
+        "text": "Dana, I'm really sorry. We'll make it right with a thousand bucks in credit on your account."
+      }
+    ],
+    "credits": [],
+    "readAt": "2026-09-13T19:08:57.010Z"
+  },
+  "searches": [
+    {
+      "query": "Acme",
+      "matches": [
+        "Acme Corp",
+        "Acme Inc"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 13461,
+    "outputTokens": 1289,
+    "turns": 5,
+    "latencyMs": 33206
+  },
+  "cardTs": "1789326551.301199"
+}
