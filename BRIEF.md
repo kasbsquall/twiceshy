@@ -20,7 +20,7 @@ All numbers are from one live eval at the submitted code (commit 3f333da): 11 sc
 | | TwiceShy | Same flow without TwiceShy |
 |---|---|---|
 | Correct verdict | 33 of 33 | cannot hold or block |
-| Wrongly blocked cases that should be paid | 0 of 15 | n/a |
+| Payable cases wrongly blocked | 0 of 15 | n/a |
 | Credited the wrong account, more than owed, or twice | 0 of 33 | 12 of 33 |
 | Dollars over-credited | $0 | $9,750 |
 | Duplicate Stripe credits | 0 | 0 (its idempotency key works) |

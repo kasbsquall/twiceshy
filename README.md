@@ -8,6 +8,8 @@
 
 <h3 align="center">TwiceShy pays each customer exactly once, even when a teammate got there first or the server crashes.</h3>
 
+<p align="center">For customer success teams that promise SLA credits in Slack after an outage, and settle them by hand in HubSpot, Linear and Stripe.</p>
+
 <p align="center">
   <img src="docs/brand/apps/slack.png" alt="Slack" height="34">&nbsp;&nbsp;&nbsp;&nbsp;
   <img src="docs/brand/apps/hubspot.png" alt="HubSpot" height="34">&nbsp;&nbsp;&nbsp;&nbsp;
@@ -44,6 +46,7 @@
 | Live eval results at the submitted code | [eval/results/2026-09-13T19-33-04-265Z/results.md](eval/results/2026-09-13T19-33-04-265Z/results.md) |
 | Live Slack session: a blocked approval and a real crash and resume | [docs/evidence/2026-09-13-live-slack-session](docs/evidence/2026-09-13-live-slack-session/README.md) |
 | Try it with no keys | `npm ci && npm run demo:offline -- --scenario s7-crash` |
+| Run it on a thread you write (live keys) | `npm run resolve -- --channel <id> --ts <thread_ts>`. Our eval threads were written by us, see [Limitations](#limitations). |
 
 <table>
   <tr>
@@ -62,9 +65,10 @@
 
 | 33 live runs per flow | TwiceShy | Same flow without TwiceShy |
 |---|---|---|
+| Runs that credited the wrong account, more than owed, or twice | 0 of 33 | 12 of 33 |
+| Dollars over-credited | $0 | $9,750 |
 | Scenarios that depend on Claude reading the thread (s1, s2, s3, s8, s9, s10, s11): correct outcome | 21 of 21 | 6 of 21 |
 | Scenarios decided mostly by code: earlier credits, the teammate race, the crash (s4, s5, s6, s7): correct outcome | 12 of 12 | 4 of 12 |
-| Runs that credited the wrong account, more than owed, or twice | 0 of 33 | 12 of 33 |
 
 The comparison flow cannot hold or block a case, so it loses those scenarios by construction; the table in the reliability section separates that from money it actually credited wrongly.
 
@@ -190,7 +194,7 @@ Linear incidents are read from issues labeled `incident`. Their time window and 
 
 ## How we tested reliability
 
-All numbers in this section come from one live run of `npm run eval` at commit 3f333da, the code in this repo: 11 scenarios, k=3, 66 runs (33 TwiceShy, 33 baseline), model claude-haiku-4-5, against real Slack, HubSpot, Linear and Stripe test mode. Safety numbers are read back from the apps after each run, not taken from what the runner reports. Full table: [`eval/results/2026-09-13T19-33-04-265Z/results.md`](eval/results/2026-09-13T19-33-04-265Z/results.md). Per-run JSON with every Stripe, HubSpot and Slack object ID: [`runs.json`](eval/results/2026-09-13T19-33-04-265Z/runs.json). Every ledger and case file is committed next to it.
+All numbers in this section come from one live run of `npm run eval` at commit 3f333da, the code in this repo (later commits change docs only): 11 scenarios, k=3, 66 runs (33 TwiceShy, 33 baseline), model claude-haiku-4-5, against real Slack, HubSpot, Linear and Stripe test mode. Safety numbers are read back from the apps after each run, not taken from what the runner reports. Full table: [`eval/results/2026-09-13T19-33-04-265Z/results.md`](eval/results/2026-09-13T19-33-04-265Z/results.md). Per-run JSON with every Stripe, HubSpot and Slack object ID: [`runs.json`](eval/results/2026-09-13T19-33-04-265Z/runs.json). Every ledger and case file is committed next to it.
 
 ### Baselines
 
@@ -244,7 +248,7 @@ Cost: median 12,983 input and 1,123 output tokens per TwiceShy run, about 2 cent
 
 In the 66-run eval, the s7 runs stop in-process right after each write has been recorded, then a new runner instance resumes from the ledger on disk. That proves the ledger replay, not the harder case.
 
-So we ran s7 again live with `--lost-response` (3 runs, [`eval/results/2026-09-13T19-17-51-324Z`](eval/results/2026-09-13T19-17-51-324Z/results.md)). Each run stops after Stripe, HubSpot or Slack accepted the write but before the ledger recorded it. The ledger only says `intent`, so the resumed runner has to find the object in the real app by run ID. In all 3 runs it did: the ledger line reads `reconciled after interruption` with the real object ID (a Stripe balance transaction, a HubSpot note, a Slack message), and the read-back shows exactly one credit, one note and one reply. These runs are at commit 5d89475, before the incident identifier fix; `src/runner.ts` and the lookup code did not change between that commit and 3f333da.
+So we ran s7 again live with `--lost-response` (3 runs, [`eval/results/2026-09-13T19-17-51-324Z`](eval/results/2026-09-13T19-17-51-324Z/results.md)). Each run stops after Stripe, HubSpot or Slack accepted the write but before the ledger recorded it. The ledger only says `intent`, so the resumed runner has to find the object in the real app by run ID. In all 3 runs it did: the ledger line reads `reconciled after interruption` with the real object ID (a Stripe balance transaction, a HubSpot note, a Slack message), and the read-back shows exactly one credit, one note and one reply. These runs are at commit 5d89475, before the incident identifier fix; `src/runtime/` (the runner and the lookup code) did not change between that commit and 3f333da.
 
 The same thing through the real Slack path, with a click on Approve, a killed server and a restart, is logged in [docs/evidence/2026-09-13-live-slack-session](docs/evidence/2026-09-13-live-slack-session/README.md), together with a run where a teammate credited first and Approve stopped.
 
