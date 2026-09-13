@@ -17,6 +17,8 @@ export interface SlackMessage {
   ts: string;
   threadTs: string;
   userId: string;
+  /** Display name for messages posted by an app with a custom username. */
+  authorName?: string;
   text: string;
 }
 

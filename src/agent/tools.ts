@@ -180,7 +180,7 @@ export async function executeReadTool(apps: Apps, thread: ThreadLocation, name: 
   switch (name) {
     case 'get_slack_thread': {
       const messages = await apps.chat.getThread(thread.channelId, thread.threadTs);
-      return JSON.stringify(messages.map((m) => ({ ts: m.ts, user_id: m.userId, text: m.text })));
+      return JSON.stringify(messages.map((m) => ({ ts: m.ts, user_id: m.userId, author_name: m.authorName ?? null, text: m.text })));
     }
     case 'search_hubspot_companies': {
       const { query } = idInput('query').parse(input) as { query: string };

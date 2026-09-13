@@ -5,6 +5,8 @@ export interface PostOptions {
   runId?: string;
   step?: string;
   blocks?: unknown[];
+  /** Custom display name, used to simulate the customer side of a shared channel. */
+  username?: string;
 }
 
 export interface ChatPort {
