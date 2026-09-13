@@ -6,19 +6,55 @@
   </picture>
 </p>
 
-# TwiceShy
+<h3 align="center">TwiceShy pays each customer exactly once, even when a teammate got there first or the server crashes.</h3>
 
-**TwiceShy pays each customer exactly once, even when a teammate got there first or the server crashes.**
-
-<p>
-  <img src="docs/brand/apps/slack.png" alt="Slack" height="32">&nbsp;&nbsp;&nbsp;
-  <img src="docs/brand/apps/hubspot.png" alt="HubSpot" height="32">&nbsp;&nbsp;&nbsp;
-  <img src="docs/brand/apps/linear.png" alt="Linear" height="32">&nbsp;&nbsp;&nbsp;
-  <img src="docs/brand/apps/stripe.png" alt="Stripe" height="32">&nbsp;&nbsp;&nbsp;
-  <img src="docs/brand/apps/claude.png" alt="Claude" height="32">
+<p align="center">
+  <img src="docs/brand/apps/slack.png" alt="Slack" height="34">&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="docs/brand/apps/hubspot.png" alt="HubSpot" height="34">&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="docs/brand/apps/linear.png" alt="Linear" height="34">&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="docs/brand/apps/stripe.png" alt="Stripe" height="34">&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="docs/brand/apps/claude.png" alt="Claude" height="34">
+  <br><sub>Slack, HubSpot, Linear and Stripe, orchestrated by one Claude agent</sub>
 </p>
 
-Slack, HubSpot, Linear and Stripe, orchestrated by one Claude agent.
+<p align="center">
+  <a href="VIDEO_URL"><img src="docs/img/demo-thumbnail.jpg" alt="Watch the 2-minute TwiceShy demo on YouTube" width="760"></a>
+</p>
+
+<p align="center">
+  <a href="VIDEO_URL"><b>Watch the 2-minute demo</b></a>
+  &nbsp;·&nbsp;
+  <a href="BRIEF.md"><b>Read the one-page system and reliability brief</b></a>
+  &nbsp;·&nbsp;
+  <a href="#how-to-run"><b>Run it offline in one command</b></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/kasbsquall/twiceshy/actions/workflows/ci.yml"><img src="https://github.com/kasbsquall/twiceshy/actions/workflows/ci.yml/badge.svg" alt="ci"></a>
+</p>
+
+# TwiceShy
+
+**For judges, in 30 seconds**
+
+| What you need | Where |
+|---|---|
+| Two-minute demo video | [YouTube](VIDEO_URL) |
+| System and reliability brief | [BRIEF.md](BRIEF.md) (one page), full detail below |
+| Live eval results at the submitted code | [eval/results/2026-09-13T19-33-04-265Z/results.md](eval/results/2026-09-13T19-33-04-265Z/results.md) |
+| Live Slack session: a blocked approval and a real crash and resume | [docs/evidence/2026-09-13-live-slack-session](docs/evidence/2026-09-13-live-slack-session/README.md) |
+| Try it with no keys | `npm ci && npm run demo:offline -- --scenario s7-crash` |
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/img/approve-stopped.gif" alt="Live: pressing Approve in Slack after a teammate already credited the customer. TwiceShy re-reads Stripe and the card turns into Stopped."></td>
+    <td width="50%"><img src="docs/img/crash-resume.gif" alt="Live: the server is killed right after Stripe accepted the credit, then restarts, finds the credit by run ID and finishes once."></td>
+  </tr>
+  <tr>
+    <td><b>A teammate got there first.</b> Approve in real Slack, TwiceShy re-reads Stripe and stops: nothing credited, no reply sent.</td>
+    <td><b>The server crashes after Stripe took the money.</b> On restart it finds the credit by run ID and finishes the note and reply once.</td>
+  </tr>
+</table>
 
 "Exactly once" here means one credit, one CRM note and one customer reply per case, across teammates and restarts. The narrow limits (a credit made in the milliseconds between the final re-read and the Stripe call, and false blocks on unrelated manual credits) are in [Limitations](#limitations).
 
@@ -33,10 +69,6 @@ Slack, HubSpot, Linear and Stripe, orchestrated by one Claude agent.
 The comparison flow cannot hold or block a case, so it loses those scenarios by construction; the table in the reliability section separates that from money it actually credited wrongly.
 
 <img src="docs/evidence/2026-09-13-live-slack-session/slack-card-stopped.png" alt="Live Slack card: Stopped, Acme Inc was already credited $1,000. Nothing was credited and no reply was sent." width="49%"> <img src="docs/evidence/2026-09-13-live-slack-session/slack-card-credited-after-crash.png" alt="Live Slack card after a real crash and restart: Credited $1,000 to Wayne Retail, resumed after an interruption, nothing was done twice." width="49%">
-
-Left: a teammate credited Acme by hand first, so Approve stopped. Right: the server was killed after Stripe accepted the credit, and the restart finished the job once. Try it with no keys: `npm ci && npm run demo:offline -- --scenario s7-crash`.
-
-[![ci](https://github.com/kasbsquall/twiceshy/actions/workflows/ci.yml/badge.svg)](https://github.com/kasbsquall/twiceshy/actions/workflows/ci.yml) Demo video: [link at the bottom](#demo-video) · One-page system and reliability brief: [BRIEF.md](BRIEF.md)
 
 ## What we built
 
@@ -265,4 +297,6 @@ Results, per-run JSON with every Stripe, HubSpot and Slack object ID, and every 
 
 ## Demo video
 
-VIDEO_LINK (2 minutes)
+<a href="VIDEO_URL"><img src="docs/img/demo-thumbnail.jpg" alt="Watch the 2-minute TwiceShy demo on YouTube" width="640"></a>
+
+**[Watch the 2-minute demo on YouTube](VIDEO_URL)**
