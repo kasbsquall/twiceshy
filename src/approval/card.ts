@@ -5,9 +5,27 @@ import type { CaseSnapshot, Cents, CheckResult } from '../types.js';
 export const APPROVE_ACTION = 'twiceshy_approve';
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+// Slack Block Kit limits.
+const HEADER_MAX = 150;
+const BUTTON_MAX = 75;
+const CONFIRM_TITLE_MAX = 100;
+const FIELD_MAX = 2000;
+const SECTION_MAX = 3000;
+
+const CONFIRM_TEXT = 'TwiceShy re-reads Stripe, HubSpot and Linear first. If anything changed since this card was posted, nothing is credited.';
+const HOLD_NOTE = 'A CS manager should confirm the amount in the thread before anyone credits this.';
+
 export function shortDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
 }
+
+function timeOf(iso: string): string {
+  return new Date(iso).toISOString().slice(11, 16);
+}
+
+const clip = (text: string, max: number): string => (text.length <= max ? text : `${text.slice(0, max - 3)}...`);
+/** Slack mrkdwn control characters, so record text can never become a mention or a link. */
+const esc = (text: string): string => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 export function renewalLine(snapshot: CaseSnapshot, now: Date): string {
   const { company } = snapshot;
@@ -19,56 +37,108 @@ export function renewalLine(snapshot: CaseSnapshot, now: Date): string {
   return `${company.name} ${soon}${value}.`;
 }
 
+function renewalField(snapshot: CaseSnapshot, now: Date): string {
+  const { company } = snapshot;
+  const days = Math.ceil((Date.parse(company.renewalDate) - now.getTime()) / DAY_MS);
+  let when = `On ${shortDate(company.renewalDate)}`;
+  if (days < 0) when = `Passed on ${shortDate(company.renewalDate)}`;
+  else if (days === 0) when = 'Today';
+  else if (days <= RENEWAL_WINDOW_DAYS) when = `In ${days} ${days === 1 ? 'day' : 'days'}`;
+  return company.annualValueMinor > 0 ? `${when}, ${formatUsd(company.annualValueMinor)} a year` : when;
+}
+
 /** The message the customer will read. Fixed template: no model text reaches the customer. */
 export function customerReply(snapshot: CaseSnapshot, creditMinor: Cents): string {
-  const { company, incident } = snapshot;
-  return `Thanks for your patience with the ${incident.title} on ${shortDate(incident.startedAt)}. We have added a ${formatUsd(creditMinor)} credit to the ${company.name} account, and it will apply to your next invoice. Sorry again for the disruption.`;
+  return `Thanks for your patience during the outage on ${shortDate(snapshot.incident.startedAt)}. We have added a ${formatUsd(creditMinor)} credit to your account, and it will apply to your next invoice. Sorry for the disruption.`;
 }
 
-/** One sentence built from verified records and code-run searches, never from model prose. */
+/** Only when the HubSpot search was ambiguous: which match was picked, from code-run searches and Linear. */
 export function decisionLine(record: CaseRecord): string {
   const snapshot = record.snapshot;
-  if (!snapshot) return '';
   const search = record.searches.at(-1);
-  const searched = search
-    ? `Searched HubSpot for "${search.query}": ${search.matches.length} ${search.matches.length === 1 ? 'match' : 'matches'}${search.matches.length > 1 ? ` (${search.matches.join(', ')})` : ''}. `
-    : '';
-  const why = snapshot.incident.affectedCompanyIds.includes(snapshot.company.id)
-    ? `because ${snapshot.incident.identifier} in Linear (${shortDate(snapshot.incident.startedAt)}) lists it as affected`
-    : `although ${snapshot.incident.identifier} in Linear does not list it`;
-  const promise = record.proposal?.kind === 'resolved' ? record.proposal.promise : null;
-  const quoted = promise ? ` Promise in the thread: "${promise.quote}" from <@${promise.authorUserId}>.` : '';
-  return `${searched}Picked ${snapshot.company.name} ${why}.${quoted}`;
+  if (!snapshot || !search || search.matches.length <= 1) return '';
+  const { company, incident } = snapshot;
+  const n = search.matches.length;
+  const names = search.matches.join(', ');
+  const picked = search.matches.includes(company.name)
+    ? `${company.name} is 1 of ${n} HubSpot matches for "${search.query}" (${names}).`
+    : `${company.name} is not among the ${n} HubSpot matches for "${search.query}" (${names}).`;
+  const listed = incident.affectedCompanyIds.includes(company.id) ? 'lists it as affected' : 'does not list it';
+  return `${picked} ${incident.identifier} in Linear ${listed}.`;
 }
 
-function headline(record: CaseRecord, now: Date): string {
-  const { verdict, snapshot } = record;
-  if (!snapshot || verdict.creditMinor === null) return 'The agent could not settle this thread. It needs a person.';
-  const action = `a ${formatUsd(verdict.creditMinor)} credit to ${snapshot.company.name} for the ${shortDate(snapshot.incident.startedAt)} outage (${snapshot.incident.identifier})`;
-  const renewal = renewalLine(snapshot, now);
-  if (record.outcome?.status === 'done') return `Paid ${action.slice(2)}. ${renewal}`.trim();
-  if (verdict.status === 'PASS') return `Approve ${action}. ${renewal}`.trim();
-  if (verdict.status === 'HOLD') return `Needs a manager: ${action}. ${renewal}`.trim();
-  return `Blocked: ${action}. ${renewal}`.trim();
+type State = 'needs_person' | 'pending' | 'hold' | 'blocked' | 'done' | 'stopped' | 'failed';
+
+function stateOf(record: CaseRecord, amount: Cents | null): State {
+  const outcome = record.outcome;
+  if (!record.snapshot) return 'needs_person';
+  if (outcome?.status === 'done') return 'done';
+  if (outcome?.status === 'blocked' && Object.keys(outcome.objects).length === 0) return 'stopped';
+  if (outcome) return 'failed';
+  if (amount === null) return 'needs_person';
+  if (record.verdict.status === 'PASS') return 'pending';
+  return record.verdict.status === 'HOLD' ? 'hold' : 'blocked';
 }
 
-function riskLine(record: CaseRecord): string {
-  let failing = record.verdict.checks.filter((c) => !c.ok);
-  if (record.verdict.status === 'PASS') return '';
-  const prefix = record.verdict.status === 'BLOCK' ? 'Do not approve: ' : 'Why it is on hold: ';
-  // A credit that is both a duplicate and new since the card was posted is one fact, said once.
-  const lateDuplicate = failing.some((c) => c.check === 'duplicate_credit') && failing.some((c) => c.check === 'stale_state');
-  if (lateDuplicate) failing = failing.filter((c) => c.check !== 'stale_state');
-  if (failing.length > 0) return prefix + failing.map((c) => c.detail).join(' ') + (lateDuplicate ? ' That credit was made after this card was posted.' : '');
-  if (record.verificationDetail) return prefix + record.verificationDetail;
-  if (record.verdict.reasons.includes('INCIDENT_NOT_ELIGIBLE')) return `${prefix}this incident does not qualify for an SLA credit under the policy.`;
-  return prefix + record.verdict.reasons.join(', ');
+/** A duplicate that is also the only change since posting is one fact: the credit arrived late. */
+function lateDuplicate(record: CaseRecord): boolean {
+  const checks = record.verdict.checks;
+  const duplicate = checks.find((c) => c.check === 'duplicate_credit' && !c.ok);
+  const stale = checks.find((c) => c.check === 'stale_state' && !c.ok);
+  const before = record.snapshot;
+  const after = record.approval?.snapshot;
+  if (!duplicate || !stale || stale.reason !== 'STALE_STATE' || stale.evidence.length === 0 || !before || !after) return false;
+  const duplicateIds = new Set(duplicate.evidence.map((e) => e.id));
+  return (
+    stale.evidence.every((e) => duplicateIds.has(e.id)) &&
+    before.company.slaTier === after.company.slaTier &&
+    before.company.stripeCustomerId === after.company.stripeCustomerId &&
+    before.incident.severity === after.incident.severity &&
+    before.incident.affectedCompanyIds.join() === after.incident.affectedCompanyIds.join()
+  );
 }
 
-function checksLine(checks: CheckResult[]): string {
-  if (checks.length === 0) return '';
-  const passed = checks.filter((c) => c.ok).length;
-  return `Checks: ${passed} of ${checks.length} passed`;
+function existingCredit(check: CheckResult | undefined, snapshot: CaseSnapshot) {
+  const id = check?.evidence[0]?.id;
+  return id ? snapshot.credits.find((c) => c.id === id) : undefined;
+}
+
+function duplicateText(check: CheckResult, snapshot: CaseSnapshot, lateInline: boolean, past: boolean): string {
+  const credit = existingCredit(check, snapshot);
+  if (!credit) return check.detail;
+  const late = lateInline ? ', after this card was posted' : '';
+  return `${snapshot.company.name} already received a ${formatUsd(credit.amountMinor)} credit in Stripe at ${timeOf(credit.createdAt)} UTC${late}. Approving would ${past ? 'have credited' : 'credit'} them twice.`;
+}
+
+interface CheckItem {
+  ok: boolean;
+  text: string;
+}
+
+function checkItems(record: CaseRecord, snapshot: CaseSnapshot, past: boolean): CheckItem[] {
+  const late = lateDuplicate(record);
+  return record.verdict.checks
+    .filter((c) => !(late && c.check === 'stale_state'))
+    .map((c) => {
+      if (c.check !== 'duplicate_credit' || c.ok) return { ok: c.ok, text: c.detail };
+      // The summary above already tells the story; the check line stays a short fact.
+      const credit = existingCredit(c, snapshot);
+      if (!credit) return { ok: false, text: duplicateText(c, snapshot, late, past) };
+      return { ok: false, text: `Already credited ${formatUsd(credit.amountMinor)} in Stripe at ${timeOf(credit.createdAt)} UTC${late ? ', after this card was posted' : ''}` };
+    });
+}
+
+/** Why the credit must not go ahead, from failing checks first, then verification and policy facts. */
+function failingText(record: CaseRecord, snapshot: CaseSnapshot | null, past: boolean): string {
+  const late = lateDuplicate(record);
+  const texts = record.verdict.checks
+    .filter((c) => !c.ok && !(late && c.check === 'stale_state'))
+    .map((c) => (c.check === 'duplicate_credit' && snapshot ? duplicateText(c, snapshot, late, past) : c.detail));
+  if (record.verdict.reasons.includes('INCIDENT_NOT_ELIGIBLE')) texts.push('This incident does not qualify for an SLA credit under the policy.');
+  if (texts.length > 0) return texts.join(' ');
+  if (record.outcome?.detail) return record.outcome.detail;
+  if (record.verificationDetail) return record.verificationDetail;
+  return record.verdict.reasons.join(', ');
 }
 
 export interface Card {
@@ -76,53 +146,161 @@ export interface Card {
   blocks: unknown[];
 }
 
-const section = (text: string) => ({ type: 'section', text: { type: 'mrkdwn', text } });
-const context = (text: string) => ({ type: 'context', elements: [{ type: 'mrkdwn', text }] });
+const plain = (text: string) => ({ type: 'plain_text', text });
+const header = (text: string) => ({ type: 'header', text: plain(clip(text, HEADER_MAX)) });
+const section = (text: string) => ({ type: 'section', text: { type: 'mrkdwn', text: clip(text, SECTION_MAX) } });
+const context = (text: string) => ({ type: 'context', elements: [{ type: 'mrkdwn', text: clip(text, SECTION_MAX) }] });
+
+function promiseField(record: CaseRecord, snapshot: CaseSnapshot): string | null {
+  const promise = record.proposal?.kind === 'resolved' ? record.proposal.promise : null;
+  if (!promise) return null;
+  const author = snapshot.thread.find((m) => m.ts === promise.messageTs)?.authorName;
+  const isUser = !promise.authorUserId.startsWith('bot:') && /^\w+$/.test(promise.authorUserId);
+  const who = author ? esc(author) : isUser ? `<@${promise.authorUserId}>` : 'An app user';
+  return `*Promised by*\n${who} in the thread: "${esc(promise.quote)}"`;
+}
+
+function fieldsBlock(record: CaseRecord, snapshot: CaseSnapshot, now: Date, showRenewal: boolean) {
+  const { incident, company } = snapshot;
+  const fields = [`*Incident*\n${esc(`${incident.identifier}, ${incident.title} on ${shortDate(incident.startedAt)}`)}`];
+  const promise = promiseField(record, snapshot);
+  if (promise) fields.push(promise);
+  if (showRenewal && company.renewalDate) fields.push(`*Renewal*\n${esc(renewalField(snapshot, now))}`);
+  return { type: 'section', fields: fields.map((text) => ({ type: 'mrkdwn', text: clip(text, FIELD_MAX) })) };
+}
+
+function checksBlock(items: CheckItem[], collapse: boolean): unknown | null {
+  if (items.length === 0) return null;
+  const failed = items.filter((i) => !i.ok);
+  if (collapse && failed.length === 0) return context(`All ${items.length} checks passed, including a re-check right before crediting.`);
+  const summary = failed.length === 0 ? `*All ${items.length} checks passed*` : `*${failed.length} ${failed.length === 1 ? 'check' : 'checks'} failed*`;
+  const lines = [...failed.map((i) => `*FAILED*  ${esc(i.text)}`), ...items.filter((i) => i.ok).map((i) => `Passed  ${esc(i.text)}`)];
+  return section([summary, ...lines].join('\n'));
+}
+
+function approveButton(record: CaseRecord, snapshot: CaseSnapshot, amount: Cents) {
+  const money = formatUsd(amount);
+  return {
+    type: 'actions',
+    elements: [
+      {
+        type: 'button',
+        text: plain(clip(`Approve ${money} credit`, BUTTON_MAX)),
+        style: 'primary',
+        action_id: APPROVE_ACTION,
+        value: record.runId,
+        confirm: {
+          title: plain(clip(`Credit ${money} to ${snapshot.company.name}?`, CONFIRM_TITLE_MAX)),
+          text: plain(CONFIRM_TEXT),
+          confirm: plain('Approve'),
+          deny: plain('Cancel'),
+        },
+      },
+    ],
+  };
+}
+
+function headlines(record: CaseRecord, state: State, snapshot: CaseSnapshot | null, amount: Cents | null, now: Date): { title: string; text: string } {
+  if (!snapshot || state === 'needs_person') {
+    return { title: 'This request needs a person', text: 'This request needs a person: TwiceShy could not settle the thread from the records.' };
+  }
+  const name = snapshot.company.name;
+  const money = amount === null ? '' : `${formatUsd(amount)} `;
+  const { incident } = snapshot;
+  const forIncident = `for ${incident.identifier} (${incident.title}, ${shortDate(incident.startedAt)})`;
+  const renewal = renewalLine(snapshot, now);
+  const withRenewal = (sentence: string) => `${sentence} ${renewal}`.trim();
+  switch (state) {
+    case 'pending':
+      return { title: `Approve ${money}credit to ${name}`, text: withRenewal(`Approve a ${money}credit to ${name} ${forIncident}.`) };
+    case 'hold':
+      return { title: `On hold: ${money}credit to ${name}`, text: withRenewal(`On hold: a ${money}credit to ${name} ${forIncident}.`) };
+    case 'blocked':
+      return { title: `Blocked: ${money}credit to ${name}`, text: withRenewal(`Blocked: a ${money}credit to ${name} ${forIncident}.`) };
+    case 'done':
+      return { title: `Credited ${money}to ${name}`, text: withRenewal(`Credited ${money}to ${name} ${forIncident}.`) };
+    case 'failed':
+      return { title: `Needs a person: ${money}credit to ${name}`, text: `Needs a person: the ${money}credit to ${name} ${forIncident} stopped partway.` };
+    case 'stopped': {
+      const duplicate = record.verdict.checks.find((c) => c.check === 'duplicate_credit' && !c.ok);
+      const credit = existingCredit(duplicate, snapshot);
+      if (credit) {
+        const already = `${name} was already credited ${formatUsd(credit.amountMinor)}`;
+        return { title: `Stopped: ${already}`, text: `Stopped: ${already}, so nothing was credited ${forIncident}.` };
+      }
+      return { title: `Stopped: nothing was credited to ${name}`, text: `Stopped: nothing was credited to ${name} ${forIncident}.` };
+    }
+  }
+}
 
 export function buildCard(original: CaseRecord, now: Date = new Date()): Card {
   // After Approve, the card shows the re-check, not the verdict from when it was posted.
   const record: CaseRecord = original.approval ? { ...original, verdict: original.approval.verdict } : original;
-  const top = headline(record, now);
-  const blocks: unknown[] = [section(`*${top}*`)];
-  const risk = riskLine(record);
-  if (risk) blocks.push(section(risk));
-  const decision = decisionLine(record);
-  if (decision) blocks.push(context(decision));
+  const snapshot = record.approval?.snapshot ?? record.snapshot;
+  const amount = record.outcome?.creditMinor ?? record.verdict.creditMinor ?? original.verdict.creditMinor;
+  const state = stateOf(record, amount);
+  const { title, text } = headlines(record, state, snapshot, amount, now);
+  const blocks: unknown[] = [header(title)];
+  const past = state === 'stopped' || state === 'failed';
+
+  if (snapshot && state !== 'needs_person') blocks.push(fieldsBlock(record, snapshot, now, state !== 'stopped'));
+
+  if (state === 'stopped') {
+    blocks.push(section(`*Nothing was credited and no reply was sent.* ${esc(failingText(record, snapshot, true))}`));
+  } else if (state === 'done' || state === 'failed') {
+    blocks.push(section(outcomeLine(record)));
+  } else if (record.verdict.status !== 'PASS') {
+    const prefix = record.verdict.status === 'BLOCK' ? '*Do not approve:*' : '*Why it is on hold:*';
+    blocks.push(section(`${prefix} ${esc(failingText(record, snapshot, false))}`));
+    if (state === 'hold') blocks.push(context(HOLD_NOTE));
+  }
 
   if (record.proposal?.kind === 'ambiguous') {
     const candidates = record.proposal.candidates.map((c) => `${c.companyId}: ${c.why}`).join('\n');
-    blocks.push(section(`*Question for the CSM:* ${record.proposal.question}\n${candidates}`));
+    blocks.push(section(`*Question for the CSM:* ${esc(record.proposal.question)}\n${esc(candidates)}`));
   }
 
-  if (record.snapshot && record.verdict.creditMinor !== null && record.verdict.status !== 'BLOCK') {
-    const label = record.outcome?.status === 'done' ? 'Reply sent to the customer' : 'Reply the customer will get';
-    blocks.push(section(`*${label}:*\n>${customerReply(record.snapshot, record.verdict.creditMinor)}`));
+  if (state !== 'stopped') {
+    const decision = decisionLine(record);
+    if (decision) blocks.push(context(esc(decision)));
   }
 
-  const checks = checksLine(record.verdict.checks);
-  const support = record.verdict.checks.map((c) => `${c.ok ? 'OK' : 'FAILED'}  ${c.detail}`).join('\n');
-  if (checks) blocks.push(context(`*${checks}*\n${support}`));
+  const items = snapshot ? checkItems(record, snapshot, past) : [];
+  // A stop raised after the re-check (on a retried credit) is explained above; old passing checks would contradict it.
+  const checks = state === 'stopped' && items.every((i) => i.ok) ? null : checksBlock(items, state === 'done');
+  if (checks) blocks.push(checks);
 
-  if (record.outcome) {
-    blocks.push(section(outcomeLine(record)));
-  } else if (record.verdict.status === 'PASS') {
-    blocks.push({
-      type: 'actions',
-      elements: [{ type: 'button', text: { type: 'plain_text', text: 'Approve' }, style: 'primary', action_id: APPROVE_ACTION, value: record.runId }],
-    });
+  if (snapshot && amount !== null && (state === 'pending' || state === 'hold' || state === 'done')) {
+    const label = state === 'done' ? 'Reply sent to the customer' : 'Reply the customer will get';
+    blocks.push(section(`*${label}:*\n>${esc(customerReply(snapshot, amount))}`));
   }
-  blocks.push(context(`Run ${record.runId}`));
-  return { text: top, blocks };
+
+  if (state === 'stopped') {
+    const who = record.approval ? `<@${record.approval.userId}>` : 'Someone';
+    blocks.push(context(`${who} pressed Approve. TwiceShy re-read Stripe, HubSpot and Linear first and stopped.`));
+  }
+  if (state === 'pending' && snapshot && amount !== null) blocks.push(approveButton(record, snapshot, amount));
+
+  blocks.push(context(`Run ID: ${record.runId}`));
+  return { text, blocks };
 }
 
 export function outcomeLine(record: CaseRecord): string {
   const outcome = record.outcome;
   if (!outcome) return '';
   const who = record.approval ? `<@${record.approval.userId}>` : 'Someone';
-  if (outcome.status === 'blocked') return `${who} pressed Approve. TwiceShy re-read Stripe, HubSpot and Linear first and stopped. Nothing was paid and no reply was sent.`;
-  if (outcome.status === 'failed') return `Approved by ${who}, but execution stopped: ${outcome.detail ?? 'unknown error'}. A person needs to look.`;
-  const resumed = outcome.resumed.length > 0 ? ' Resumed after interruption, nothing was done twice.' : '';
-  return `Approved by ${who}. Paid ${outcome.creditMinor === null ? '' : formatUsd(outcome.creditMinor)} once.${resumed}`;
+  if (outcome.status === 'blocked' && Object.keys(outcome.objects).length === 0) {
+    return `${who} pressed Approve. TwiceShy re-read Stripe, HubSpot and Linear first and stopped. Nothing was credited and no reply was sent.`;
+  }
+  if (outcome.status !== 'done') {
+    const detail = esc((outcome.detail ?? 'unknown error').replace(/\.+$/, ''));
+    const stripe = outcome.objects.stripe_credit;
+    const next = stripe ? `The Stripe credit ${stripe} exists; a person needs to finish the rest.` : 'Check Stripe before retrying: the credit may already exist.';
+    return `Approved by ${who}, but execution stopped: ${detail}. ${next}`;
+  }
+  const credit = outcome.creditMinor === null ? 'the credit' : `the ${formatUsd(outcome.creditMinor)} credit`;
+  const resumed = outcome.resumed.length > 0 ? ' Resumed after an interruption; nothing was done twice.' : '';
+  return `Approved by ${who}. Added ${credit} in Stripe, logged a HubSpot note and posted the reply.${resumed}`;
 }
 
 export function receiptText(record: CaseRecord): string {
@@ -134,6 +312,6 @@ export function receiptText(record: CaseRecord): string {
     `HubSpot note: ${o.objects.hubspot_note ?? 'not created'}`,
     `Slack reply to the customer: ${o.objects.slack_reply ?? 'not sent'}`,
   ];
-  if (o.resumed.length > 0) lines.push(`Resumed after interruption at: ${o.resumed.join(', ')}`);
+  if (o.resumed.length > 0) lines.push(`Resumed after an interruption at: ${o.resumed.join(', ')}`);
   return lines.join('\n');
 }

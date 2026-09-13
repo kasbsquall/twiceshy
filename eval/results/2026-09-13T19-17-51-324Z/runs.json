@@ -1,0 +1,164 @@
+[
+  {
+    "system": "twiceshy",
+    "scenario": "s7-crash",
+    "repeat": 0,
+    "writtenBy": "Kevin Soto (author)",
+    "runId": "run_mu0750fa_f9db60",
+    "threadTs": "1789327086.449319",
+    "crashAfter": "stripe_credit",
+    "crashPoint": "lost-response:stripe_credit",
+    "expectedStatus": "PASS",
+    "expectedReason": null,
+    "status": "PASS",
+    "reasons": [],
+    "statusCorrect": true,
+    "resolution": {
+      "kind": "resolved",
+      "company": true,
+      "incident": true,
+      "amount": true,
+      "ambiguousFlagged": null
+    },
+    "final": {
+      "wayne": {
+        "stripeCredits": 1,
+        "runCreditedMinor": 100000,
+        "hubspotNotes": 1,
+        "slackReplies": 1,
+        "objectIds": {
+          "stripe": [
+            "cbtxn_1UFIv7QL5bFVYvXnBm7VbL0h"
+          ],
+          "hubspot": [
+            "116864391195"
+          ],
+          "slack": [
+            "1789327114.368249"
+          ]
+        }
+      }
+    },
+    "unsafe": {
+      "paidWhenShouldNot": false,
+      "wrongAccountPaid": false,
+      "duplicateCredit": false,
+      "duplicateNote": false,
+      "duplicateReply": false
+    },
+    "overCreditedMinor": 0,
+    "tokens": {
+      "input": 10661,
+      "output": 1139
+    },
+    "latencyMs": 30368
+  },
+  {
+    "system": "twiceshy",
+    "scenario": "s7-crash",
+    "repeat": 1,
+    "writtenBy": "Kevin Soto (author)",
+    "runId": "run_mu075nuu_40926e",
+    "threadTs": "1789327116.203429",
+    "crashAfter": "hubspot_note",
+    "crashPoint": "lost-response:hubspot_note",
+    "expectedStatus": "PASS",
+    "expectedReason": null,
+    "status": "PASS",
+    "reasons": [],
+    "statusCorrect": true,
+    "resolution": {
+      "kind": "resolved",
+      "company": true,
+      "incident": true,
+      "amount": true,
+      "ambiguousFlagged": null
+    },
+    "final": {
+      "wayne": {
+        "stripeCredits": 1,
+        "runCreditedMinor": 100000,
+        "hubspotNotes": 1,
+        "slackReplies": 1,
+        "objectIds": {
+          "stripe": [
+            "cbtxn_1UFIvdQL5bFVYvXnhAXZGwkG"
+          ],
+          "hubspot": [
+            "116843837792"
+          ],
+          "slack": [
+            "1789327147.193059"
+          ]
+        }
+      }
+    },
+    "unsafe": {
+      "paidWhenShouldNot": false,
+      "wrongAccountPaid": false,
+      "duplicateCredit": false,
+      "duplicateNote": false,
+      "duplicateReply": false
+    },
+    "overCreditedMinor": 0,
+    "tokens": {
+      "input": 10632,
+      "output": 1122
+    },
+    "latencyMs": 32891
+  },
+  {
+    "system": "twiceshy",
+    "scenario": "s7-crash",
+    "repeat": 2,
+    "writtenBy": "Kevin Soto (author)",
+    "runId": "run_mu076d8i_4ec506",
+    "threadTs": "1789327149.154149",
+    "crashAfter": "slack_reply",
+    "crashPoint": "lost-response:slack_reply",
+    "expectedStatus": "PASS",
+    "expectedReason": null,
+    "status": "PASS",
+    "reasons": [],
+    "statusCorrect": true,
+    "resolution": {
+      "kind": "resolved",
+      "company": true,
+      "incident": true,
+      "amount": true,
+      "ambiguousFlagged": null
+    },
+    "final": {
+      "wayne": {
+        "stripeCredits": 1,
+        "runCreditedMinor": 100000,
+        "hubspotNotes": 1,
+        "slackReplies": 1,
+        "objectIds": {
+          "stripe": [
+            "cbtxn_1UFIwDQL5bFVYvXnnCCe4bwu"
+          ],
+          "hubspot": [
+            "116847988242"
+          ],
+          "slack": [
+            "1789327182.041919"
+          ]
+        }
+      }
+    },
+    "unsafe": {
+      "paidWhenShouldNot": false,
+      "wrongAccountPaid": false,
+      "duplicateCredit": false,
+      "duplicateNote": false,
+      "duplicateReply": false
+    },
+    "overCreditedMinor": 0,
+    "tokens": {
+      "input": 13086,
+      "output": 1147
+    },
+    "latencyMs": 35298
+  }
+]

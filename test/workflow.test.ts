@@ -60,8 +60,9 @@ describe('workflow', () => {
     const record = await prepareCase(deps, thread, resolver);
     expect(record.verdict.status).toBe('PASS');
     expect(buildCard(record, new Date('2026-09-13T15:00:00Z')).text).toBe(
-      'Approve a $1,000 credit to Acme Inc for the API outage on Sep 8 (AVA-1). Acme Inc renews in 41 days ($48,000 a year).',
+      'Approve a $1,000 credit to Acme Inc for AVA-1 (API outage, Sep 8). Acme Inc renews in 41 days ($48,000 a year).',
     );
+    expect(buildCard(record, new Date('2026-09-13T15:00:00Z')).blocks[0]).toEqual({ type: 'header', text: { type: 'plain_text', text: 'Approve $1,000 credit to Acme Inc' } });
 
     const result = await approveCase(deps, record.runId, 'U_MANAGER');
     expect(result.status).toBe('done');
@@ -98,9 +99,12 @@ describe('workflow', () => {
     expect(replies(state)).toHaveLength(0);
     if (result.status === 'blocked') {
       const card = buildCard(result.record);
-      expect(card.text.startsWith('Blocked:')).toBe(true);
-      expect(card.blocks.map((b) => JSON.stringify(b)).join()).toContain('pay them twice');
-      expect(card.blocks.map((b) => JSON.stringify(b)).join()).not.toContain('Reply the customer will get');
+      const json = card.blocks.map((b) => JSON.stringify(b)).join();
+      expect(card.text.startsWith('Stopped:')).toBe(true);
+      expect(json).toContain('Nothing was credited and no reply was sent.');
+      expect(json).toContain('credited them twice');
+      expect(json).not.toContain('Reply the customer will get');
+      expect(json).not.toContain('twiceshy_approve');
     }
   });
 

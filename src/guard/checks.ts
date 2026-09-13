@@ -25,7 +25,7 @@ export function checkDuplicateCredit(snapshot: CaseSnapshot): CheckResult {
     check: 'duplicate_credit',
     ok: false,
     reason: 'DUPLICATE_CREDIT',
-    detail: `${company.name} already received a ${formatUsd(first.amountMinor)} credit in Stripe at ${timeOf(first.createdAt)} UTC. Approving would pay them twice.`,
+    detail: `${company.name} already received a ${formatUsd(first.amountMinor)} credit in Stripe at ${timeOf(first.createdAt)} UTC. Approving would credit them twice.`,
     evidence: duplicates.map((d) => ({ app: 'stripe' as const, id: d.id })),
   };
 }

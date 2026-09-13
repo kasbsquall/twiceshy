@@ -1,0 +1,280 @@
+{
+  "runId": "run_mu0750fa_f9db60",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789327086.449319"
+  },
+  "createdAt": "2026-09-13T19:18:18.686Z",
+  "proposal": {
+    "kind": "resolved",
+    "companyId": "58424616243",
+    "stripeCustomerId": "cus_VFoXUQ52tHKLwW",
+    "incidentId": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+    "promise": {
+      "amountMinor": 100000,
+      "currency": "usd",
+      "authorUserId": "U0C1MHQB4KE",
+      "messageTs": "1789327086.634219",
+      "quote": "A grand in credit"
+    },
+    "reasoning": "Wayne Retail experienced the Checkout API outage (AVA-6) on September 8, 2026, which matches Rick Alvarez's report of a Tuesday checkout outage during their flash sale. The CSM promised $1,000 in credit in response.",
+    "evidence": [
+      {
+        "app": "slack",
+        "id": "1789327086.449319",
+        "quote": "Tuesday checkout outage hit our flash sale"
+      },
+      {
+        "app": "slack",
+        "id": "1789327086.634219",
+        "quote": "A grand in credit is coming your way"
+      },
+      {
+        "app": "hubspot",
+        "id": "58424616243"
+      },
+      {
+        "app": "linear",
+        "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+        "quote": "Checkout API outage"
+      }
+    ]
+  },
+  "verdict": {
+    "status": "PASS",
+    "reasons": [],
+    "checks": [
+      {
+        "check": "duplicate_credit",
+        "ok": true,
+        "detail": "No credit issued yet for this incident",
+        "evidence": []
+      },
+      {
+        "check": "amount_vs_policy",
+        "ok": true,
+        "detail": "Promise matches policy: $1,000",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789327086.634219",
+            "quote": "A grand in credit"
+          }
+        ]
+      },
+      {
+        "check": "promise_authority",
+        "ok": true,
+        "detail": "Promise written by an internal team member",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789327086.634219"
+          }
+        ]
+      },
+      {
+        "check": "account_identity",
+        "ok": true,
+        "detail": "Wayne Retail matches across HubSpot, Stripe and AVA-6",
+        "evidence": [
+          {
+            "app": "hubspot",
+            "id": "58424616243"
+          },
+          {
+            "app": "stripe",
+            "id": "cus_VFoXUQ52tHKLwW"
+          },
+          {
+            "app": "linear",
+            "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad"
+          }
+        ]
+      }
+    ],
+    "creditMinor": 100000
+  },
+  "snapshot": {
+    "company": {
+      "id": "58424616243",
+      "name": "Wayne Retail",
+      "slaTier": "premium",
+      "renewalDate": "2026-10-18",
+      "annualValueMinor": 5400000,
+      "stripeCustomerId": "cus_VFoXUQ52tHKLwW"
+    },
+    "incident": {
+      "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+      "identifier": "AVA-6",
+      "title": "Checkout API outage",
+      "severity": "sev1",
+      "startedAt": "2026-09-08T14:00:00Z",
+      "resolvedAt": "2026-09-08T17:10:00Z",
+      "affectedCompanyIds": [
+        "58445344385",
+        "58426002498",
+        "58424616243",
+        "58413899317",
+        "58420738851",
+        "58430945350",
+        "58433412938"
+      ]
+    },
+    "thread": [
+      {
+        "ts": "1789327086.449319",
+        "threadTs": "1789327086.449319",
+        "userId": "bot:B0C1MJ65DAQ",
+        "authorName": "Rick Alvarez (Wayne)",
+        "text": "Tuesday checkout outage hit our flash sale. Can you do something?"
+      },
+      {
+        "ts": "1789327086.634219",
+        "threadTs": "1789327086.449319",
+        "userId": "U0C1MHQB4KE",
+        "text": "So sorry Rick. A grand in credit is coming your way."
+      }
+    ],
+    "credits": [],
+    "readAt": "2026-09-13T19:18:18.671Z"
+  },
+  "searches": [
+    {
+      "query": "Wayne",
+      "matches": [
+        "Wayne Retail"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 10661,
+    "outputTokens": 1139,
+    "turns": 4,
+    "latencyMs": 26085
+  },
+  "approval": {
+    "userId": "U0C1MHQB4KE",
+    "at": "2026-09-13T19:18:19.606Z",
+    "snapshot": {
+      "company": {
+        "id": "58424616243",
+        "name": "Wayne Retail",
+        "slaTier": "premium",
+        "renewalDate": "2026-10-18",
+        "annualValueMinor": 5400000,
+        "stripeCustomerId": "cus_VFoXUQ52tHKLwW"
+      },
+      "incident": {
+        "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+        "identifier": "AVA-6",
+        "title": "Checkout API outage",
+        "severity": "sev1",
+        "startedAt": "2026-09-08T14:00:00Z",
+        "resolvedAt": "2026-09-08T17:10:00Z",
+        "affectedCompanyIds": [
+          "58445344385",
+          "58426002498",
+          "58424616243",
+          "58413899317",
+          "58420738851",
+          "58430945350",
+          "58433412938"
+        ]
+      },
+      "thread": [
+        {
+          "ts": "1789327086.449319",
+          "threadTs": "1789327086.449319",
+          "userId": "bot:B0C1MJ65DAQ",
+          "authorName": "Rick Alvarez (Wayne)",
+          "text": "Tuesday checkout outage hit our flash sale. Can you do something?"
+        },
+        {
+          "ts": "1789327086.634219",
+          "threadTs": "1789327086.449319",
+          "userId": "U0C1MHQB4KE",
+          "text": "So sorry Rick. A grand in credit is coming your way."
+        }
+      ],
+      "credits": [],
+      "readAt": "2026-09-13T19:18:19.606Z"
+    },
+    "verdict": {
+      "status": "PASS",
+      "reasons": [],
+      "checks": [
+        {
+          "check": "duplicate_credit",
+          "ok": true,
+          "detail": "No credit issued yet for this incident",
+          "evidence": []
+        },
+        {
+          "check": "amount_vs_policy",
+          "ok": true,
+          "detail": "Promise matches policy: $1,000",
+          "evidence": [
+            {
+              "app": "slack",
+              "id": "1789327086.634219",
+              "quote": "A grand in credit"
+            }
+          ]
+        },
+        {
+          "check": "promise_authority",
+          "ok": true,
+          "detail": "Promise written by an internal team member",
+          "evidence": [
+            {
+              "app": "slack",
+              "id": "1789327086.634219"
+            }
+          ]
+        },
+        {
+          "check": "account_identity",
+          "ok": true,
+          "detail": "Wayne Retail matches across HubSpot, Stripe and AVA-6",
+          "evidence": [
+            {
+              "app": "hubspot",
+              "id": "58424616243"
+            },
+            {
+              "app": "stripe",
+              "id": "cus_VFoXUQ52tHKLwW"
+            },
+            {
+              "app": "linear",
+              "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad"
+            }
+          ]
+        },
+        {
+          "check": "stale_state",
+          "ok": true,
+          "detail": "Nothing changed since the card was posted",
+          "evidence": []
+        }
+      ],
+      "creditMinor": 100000
+    }
+  },
+  "outcome": {
+    "status": "done",
+    "objects": {
+      "stripe_credit": "cbtxn_1UFIv7QL5bFVYvXnBm7VbL0h",
+      "hubspot_note": "116864391195",
+      "slack_reply": "1789327114.368249"
+    },
+    "resumed": [
+      "stripe_credit",
+      "hubspot_note",
+      "slack_reply"
+    ],
+    "creditMinor": 100000,
+    "reasons": []
+  }
+}
