@@ -98,7 +98,8 @@ export async function resolveThread(client: ModelClient, model: string, apps: Ap
       max_tokens: 16000,
       system: SYSTEM,
       tools: [...READ_TOOLS, SUBMIT_TOOL],
-      thinking: { type: 'adaptive' },
+      // Haiku 4.5 predates adaptive thinking; newer models get it.
+      ...(model.startsWith('claude-haiku-4-5') ? {} : { thinking: { type: 'adaptive' as const } }),
       messages,
       ...(model === 'claude-opus-5' ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' as const } : {}),
     });
