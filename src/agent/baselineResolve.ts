@@ -44,7 +44,7 @@ export interface BaselineResult {
 
 export async function baselineResolve(client: ModelClient, model: string, apps: Apps, thread: ThreadLocation): Promise<BaselineResult> {
   const messages = await apps.chat.getThread(thread.channelId, thread.threadTs);
-  const transcript = messages.map((m) => `[ts ${m.ts}] <${m.userId}> ${m.text}`).join('\n');
+  const transcript = messages.map((m) => `[ts ${m.ts}] <${m.userId}${m.authorName ? ` ${m.authorName}` : ''}> ${m.text}`).join('\n');
   const response = await client.create({
     model,
     max_tokens: 2000,

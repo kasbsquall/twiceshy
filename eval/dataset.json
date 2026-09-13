@@ -1,0 +1,62 @@
+{
+  "companies": {
+    "acme_corp": {
+      "id": "58436208915",
+      "name": "Acme Corp"
+    },
+    "acme_inc": {
+      "id": "58445344385",
+      "name": "Acme Inc"
+    },
+    "globex": {
+      "id": "58430789728",
+      "name": "Globex Shipping"
+    },
+    "initech": {
+      "id": "58416226347",
+      "name": "Initech"
+    },
+    "umbrella": {
+      "id": "58426002498",
+      "name": "Umbrella Health"
+    },
+    "hooli": {
+      "id": "58430945069",
+      "name": "Hooli Payments"
+    },
+    "stark": {
+      "id": "58423221645",
+      "name": "Stark Logistics"
+    },
+    "wayne": {
+      "id": "58424616243",
+      "name": "Wayne Retail"
+    },
+    "vandelay_imports": {
+      "id": "58413899317",
+      "name": "Vandelay Imports"
+    },
+    "vandelay_industries": {
+      "id": "58420738851",
+      "name": "Vandelay Industries"
+    }
+  },
+  "incidents": {
+    "checkout_outage": {
+      "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+      "identifier": "AVA-6"
+    },
+    "webhook_delay": {
+      "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+      "identifier": "AVA-7"
+    },
+    "login_outage": {
+      "id": "70ed3f90-670c-4f82-b67f-3fdd95cf00d6",
+      "identifier": "AVA-8"
+    },
+    "august_outage": {
+      "id": "348f9be4-57e4-4e79-9dc0-de1f84aa3894",
+      "identifier": "AVA-9"
+    }
+  }
+}

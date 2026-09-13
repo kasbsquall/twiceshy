@@ -12,6 +12,7 @@ const liveSchema = z.object({
     .startsWith('sk_test_', 'Only Stripe test mode keys are allowed'),
   SLACK_BOT_TOKEN: z.string().startsWith('xoxb-'),
   SLACK_APP_TOKEN: z.string().startsWith('xapp-'),
+  SLACK_USER_TOKEN: z.string().startsWith('xoxp-').optional(),
   SLACK_DEMO_CHANNEL_ID: z.string().min(1),
   SLACK_EVAL_CHANNEL_ID: z.string().min(1),
   SLACK_APPROVAL_CHANNEL_ID: z.string().min(1),
@@ -28,6 +29,8 @@ export interface LiveConfig {
   stripeSecretKey: string;
   slackBotToken: string;
   slackAppToken: string;
+  /** Only the eval seeder uses it, to post the CSM side of test threads. */
+  slackUserToken?: string;
   slackDemoChannelId: string;
   slackEvalChannelId: string;
   slackApprovalChannelId: string;
@@ -62,6 +65,7 @@ export function loadLiveConfig(env: NodeJS.ProcessEnv = process.env): LiveConfig
     stripeSecretKey: e.STRIPE_SECRET_KEY,
     slackBotToken: e.SLACK_BOT_TOKEN,
     slackAppToken: e.SLACK_APP_TOKEN,
+    ...(e.SLACK_USER_TOKEN ? { slackUserToken: e.SLACK_USER_TOKEN } : {}),
     slackDemoChannelId: e.SLACK_DEMO_CHANNEL_ID,
     slackEvalChannelId: e.SLACK_EVAL_CHANNEL_ID,
     slackApprovalChannelId: e.SLACK_APPROVAL_CHANNEL_ID,

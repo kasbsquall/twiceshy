@@ -75,6 +75,12 @@ export class SlackChat implements ChatPort {
     await this.client.chat.update({ channel: channelId, ts, text, ...(blocks ? { blocks: blocks as never } : {}) });
   }
 
+  /** Eval: every message this system posted for a run in a thread, whatever the step. */
+  async listRunMessages(channelId: string, threadTs: string, runId: string): Promise<string[]> {
+    const raw = await this.replies(channelId, threadTs);
+    return raw.filter((m) => m.metadata?.event_type === EVENT_TYPE && m.metadata.event_payload?.run_id === runId).map((m) => m.ts!);
+  }
+
   async findPostedMessage(channelId: string, threadTs: string, runId: string, step: string): Promise<string | null> {
     const raw = await this.replies(channelId, threadTs);
     const found = raw.find(
