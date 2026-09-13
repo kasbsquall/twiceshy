@@ -174,7 +174,7 @@ The baseline's misses are all in `results.md`.
 
 <img src="docs/img/slack-card-pass.png" alt="TwiceShy approval card in Slack: Approve $1,000 credit to Acme Inc, with incident, promise, renewal, 4 checks passed, the customer reply and the Approve button" width="720">
 
-Captured from a live run in our Slack workspace (, s1).
+Captured from a live run in our Slack workspace (scenario s1, run `run_mu07y9ag_9d196f`).
 
 The approval card in Slack opens with **Approve $1,000 credit to Acme Inc**. Under it: the incident (AVA-6, Checkout API outage on Sep 8), who promised it and the quote from the thread, and when the account renews. Because HubSpot has two Acmes, one line says "Acme Inc is 1 of 2 HubSpot matches for "Acme" (Acme Corp, Acme Inc). AVA-6 in Linear lists it as affected." Then "All 4 checks passed", the exact reply the customer will get, and a button that says **Approve $1,000 credit**. Pressing it asks for confirmation and explains that TwiceShy re-reads Stripe, HubSpot and Linear first.
 
