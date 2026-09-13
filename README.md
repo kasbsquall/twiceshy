@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/brand/twiceshy-lockup.svg" alt="TwiceShy" width="420"></p>
+
 # TwiceShy
 
 **TwiceShy pays each customer exactly once, even when a teammate got there first or the server crashes.**
@@ -23,11 +25,11 @@ TwiceShy is one orchestrator agent that settles the credit:
 
 | App | What TwiceShy does there |
 |---|---|
-| Slack | Reads the shared customer thread; posts the approval card in an internal channel over Socket Mode; replies to the customer |
-| HubSpot | Finds the company, reads SLA tier, renewal date, contract value and Stripe customer ID; writes a note with the outcome |
-| Linear | Reads incidents: severity, time window, affected accounts |
-| Stripe (test mode) | Lists prior credits, credit notes and refunds; creates the customer balance credit |
-| Claude API | Resolves the thread with tool use (model set by `ANTHROPIC_MODEL`, default `claude-haiku-4-5`) |
+| <img src="https://cdn.simpleicons.org/slack" width="16"> Slack | Reads the shared customer thread; posts the approval card in an internal channel over Socket Mode; replies to the customer |
+| <img src="https://cdn.simpleicons.org/hubspot" width="16"> HubSpot | Finds the company, reads SLA tier, renewal date, contract value and Stripe customer ID; writes a note with the outcome |
+| <img src="https://cdn.simpleicons.org/linear" width="16"> Linear | Reads incidents: severity, time window, affected accounts |
+| <img src="https://cdn.simpleicons.org/stripe" width="16"> Stripe (test mode) | Lists prior credits, credit notes and refunds; creates the customer balance credit |
+| <img src="https://cdn.simpleicons.org/anthropic" width="16"> Claude API | Resolves the thread with tool use (model set by `ANTHROPIC_MODEL`, default `claude-haiku-4-5`) |
 
 ## How to run
 
