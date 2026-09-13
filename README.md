@@ -34,7 +34,7 @@ The comparison flow cannot hold or block a case, so it loses those scenarios by 
 
 Left: a teammate credited Acme by hand first, so Approve stopped. Right: the server was killed after Stripe accepted the credit, and the restart finished the job once. Try it with no keys: `npm ci && npm run demo:offline -- --scenario s7-crash`.
 
-[![ci](https://github.com/kasbsquall/twiceshy/actions/workflows/ci.yml/badge.svg)](https://github.com/kasbsquall/twiceshy/actions/workflows/ci.yml) Demo video: [link at the bottom](#demo-video)
+[![ci](https://github.com/kasbsquall/twiceshy/actions/workflows/ci.yml/badge.svg)](https://github.com/kasbsquall/twiceshy/actions/workflows/ci.yml) Demo video: [link at the bottom](#demo-video) · One-page system and reliability brief: [BRIEF.md](BRIEF.md)
 
 ## What we built
 
