@@ -10,7 +10,9 @@ const log = (message: string) => process.stdout.write(`[${new Date().toISOString
 function crashPoint(): CrashPoint | undefined {
   const i = process.argv.indexOf('--crash-after');
   const step = i >= 0 ? process.argv[i + 1] : undefined;
-  return step ? (`after:${step}` as CrashPoint) : undefined;
+  if (!step) return undefined;
+  // Accepts a step (after it) or a full point such as lost-response:stripe_credit.
+  return (step.includes(':') ? step : `after:${step}`) as CrashPoint;
 }
 
 /**

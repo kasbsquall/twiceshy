@@ -65,6 +65,11 @@ describe('guard', () => {
     expect(verdict.reasons).toContain('DUPLICATE_CREDIT');
   });
 
+  it('still blocks a manual credit made two months after the incident', () => {
+    const late = { ...manualCredit, createdAt: '2026-11-13T15:42:00Z' };
+    expect(evaluateCase(proposal(), snapshot([late]), internal).reasons).toContain('DUPLICATE_CREDIT');
+  });
+
   it('does not block a credit linked to a different incident', () => {
     const other = { ...manualCredit, id: 'cbtxn_other', metadata: { incident_id: 'inc_old' } };
     expect(evaluateCase(proposal(), snapshot([other]), internal).status).toBe('PASS');

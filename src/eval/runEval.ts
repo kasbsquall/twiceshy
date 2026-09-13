@@ -27,6 +27,7 @@ export interface RunRecord {
   runId: string;
   threadTs: string;
   crashAfter: StepName | null;
+  crashPoint: CrashPoint | null;
   expectedStatus: string;
   expectedReason: string | null;
   /** twiceshy: final verdict after approval. baseline: EXECUTED or NO_PROPOSAL. */
@@ -43,6 +44,9 @@ export interface RunRecord {
 }
 
 const STEPS: StepName[] = ['stripe_credit', 'hubspot_note', 'slack_reply'];
+// --lost-response crashes after the app accepted the write but before the ledger recorded it,
+// so recovery has to find the object in the live app by run ID.
+const CRASH_KIND = process.argv.includes('--lost-response') ? 'lost-response' : 'after';
 
 function resolutionOf(scenario: Scenario, dataset: Dataset, proposal: Proposal | null): RunRecord['resolution'] {
   const exp = scenario.expected;
@@ -69,6 +73,7 @@ async function runOne(
   const runId = newRunId();
   const started = Date.now();
   const crashAfter = scenario.crash ? STEPS[repeat % STEPS.length]! : null;
+  const crashPoint: CrashPoint | null = crashAfter ? `${CRASH_KIND}:${crashAfter}` : null;
   const universe = await freshUniverse(apps, dataset, scenario, `${system}:${scenario.id}:${repeat}`);
   const thread = await postThread(apps, config.slackUserToken!, config.slackEvalChannelId, scenario);
 
@@ -116,7 +121,7 @@ async function runOne(
       if (record.verdict.status === 'PASS') {
         await manualCredit();
         const approver = [...config.approverUserIds][0]!;
-        const crashAt: CrashPoint | undefined = crashAfter ? `after:${crashAfter}` : undefined;
+        const crashAt = crashPoint ?? undefined;
         try {
           const result = await approveCase(deps(), runId, approver, crashAt ? { crashAt } : {});
           if ('record' in result) {
@@ -177,6 +182,7 @@ async function runOne(
     runId,
     threadTs: thread.threadTs,
     crashAfter,
+    crashPoint,
     expectedStatus: exp.status,
     expectedReason: exp.reason ?? null,
     status,

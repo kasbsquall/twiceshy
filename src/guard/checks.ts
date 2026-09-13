@@ -1,21 +1,21 @@
-import { MANUAL_CREDIT_WINDOW_DAYS, ROLE_CAPS, formatUsd } from '../policy.js';
+import { ROLE_CAPS, formatUsd } from '../policy.js';
 import type { CaseSnapshot, Cents, CheckResult, ResolvedProposal, Role } from '../types.js';
 
-const DAY_MS = 24 * 60 * 60 * 1000;
+const ROLE_LABEL: Record<Role, string> = { csm: 'CSM', cs_manager: 'CS manager' };
 
 function timeOf(iso: string): string {
   return new Date(iso).toISOString().slice(11, 16);
 }
 
-/** A credit for this incident exists already, by metadata or as a manual credit near the incident. */
+/** A credit for this incident exists already, by metadata or as a manual credit made after the incident started. */
 export function checkDuplicateCredit(snapshot: CaseSnapshot): CheckResult {
   const { incident, credits, company } = snapshot;
   const started = Date.parse(incident.startedAt);
   const duplicates = credits.filter((credit) => {
     const linkedIncident = credit.metadata['incident_id'];
     if (linkedIncident) return linkedIncident === incident.id;
-    const created = Date.parse(credit.createdAt);
-    return created >= started && created - started <= MANUAL_CREDIT_WINDOW_DAYS * DAY_MS;
+    // No upper bound: a teammate may credit weeks later, and a false block costs a look, not money.
+    return Date.parse(credit.createdAt) >= started;
   });
   const first = duplicates[0];
   if (!first) {
@@ -48,7 +48,7 @@ export function checkAmountVsPolicy(
       check: 'amount_vs_policy',
       ok: false,
       reason: 'AMOUNT_ABOVE_ROLE_CAP',
-      detail: `A ${role} promised ${formatUsd(promise.amountMinor)}, above their ${formatUsd(cap)} limit.`,
+      detail: `The ${ROLE_LABEL[role]} promised ${formatUsd(promise.amountMinor)}. ${ROLE_LABEL[role]}s can offer up to ${formatUsd(cap)}.`,
       evidence,
     };
   }
@@ -83,7 +83,7 @@ export function checkPromiseAuthority(
     check: 'promise_authority',
     ok: false,
     reason: 'PROMISE_NOT_AUTHORIZED',
-    detail: 'The customer mentions a promise, but no one on the team wrote it in the thread.',
+    detail: 'This promise was not made by someone allowed to offer credits (a CSM or CS manager).',
     evidence: [{ app: 'slack', id: promise.messageTs, quote: promise.quote }],
   };
 }

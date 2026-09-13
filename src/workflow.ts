@@ -123,6 +123,8 @@ export async function approveCase(deps: WorkflowDeps, runId: string, approverUse
     return { status: 'not_approvable' };
   }
   if (record.outcome || deps.ledger.hasStatus(runId, 'run', 'intent')) return { status: 'already_done' };
+  // Claim the run before any await: two clicks on the same card cannot both pass this line.
+  deps.ledger.append({ runId, step: 'run', status: 'intent', detail: `approval started by ${approverUserId}` });
 
   let verdict: Verdict;
   let fresh: CaseSnapshot | null = null;
@@ -140,12 +142,12 @@ export async function approveCase(deps: WorkflowDeps, runId: string, approverUse
   record.approval = { userId: approverUserId, at: new Date().toISOString(), snapshot: fresh ?? record.snapshot, verdict };
   if (verdict.status !== 'PASS' || !fresh) {
     record.outcome = { status: 'blocked', objects: {}, resumed: [], creditMinor: verdict.creditMinor, reasons: verdict.reasons, detail: new GuardBlocked(verdict).message };
+    deps.ledger.append({ runId, step: 'run', status: 'failed', detail: `blocked on approval: ${verdict.reasons.join(', ')}` });
     deps.cases.save(record);
     await syncCard(deps, record);
     return { status: 'blocked', record };
   }
 
-  deps.ledger.append({ runId, step: 'run', status: 'intent', detail: `approved by ${approverUserId}` });
   deps.cases.save(record);
   return executeCase(deps, record, options);
 }

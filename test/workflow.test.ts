@@ -60,7 +60,7 @@ describe('workflow', () => {
     const record = await prepareCase(deps, thread, resolver);
     expect(record.verdict.status).toBe('PASS');
     expect(buildCard(record, new Date('2026-09-13T15:00:00Z')).text).toBe(
-      'Approve a $1,000 credit to Acme Inc for the Sep 8 outage (AVA-1). Acme Inc renews in 41 days ($48,000 a year).',
+      'Approve a $1,000 credit to Acme Inc for the API outage on Sep 8 (AVA-1). Acme Inc renews in 41 days ($48,000 a year).',
     );
 
     const result = await approveCase(deps, record.runId, 'U_MANAGER');
@@ -69,6 +69,16 @@ describe('workflow', () => {
     expect(state.notes['co_inc']).toHaveLength(1);
     expect(replies(state)).toHaveLength(1);
     expect(await approveCase(deps, record.runId, 'U_MANAGER')).toEqual({ status: 'already_done' });
+  });
+
+  it('two Approve clicks at the same time pay, note and reply once', async () => {
+    const { state, deps, resolver } = setup();
+    const record = await prepareCase(deps, thread, resolver);
+    const results = await Promise.all([approveCase(deps, record.runId, 'U_MANAGER'), approveCase(deps, record.runId, 'U_MANAGER')]);
+    expect(results.map((r) => r.status).sort()).toEqual(['already_done', 'done']);
+    expect(ours(state)).toHaveLength(1);
+    expect(state.notes['co_inc']).toHaveLength(1);
+    expect(replies(state)).toHaveLength(1);
   });
 
   it('refuses approval from someone outside the allowlist', async () => {
