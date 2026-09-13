@@ -20,6 +20,8 @@
 
 Slack, HubSpot, Linear and Stripe, orchestrated by one Claude agent.
 
+"Exactly once" here means one credit, one CRM note and one customer reply per case, across teammates and restarts. The narrow limits (a credit made in the milliseconds between the final re-read and the Stripe call, and false blocks on unrelated manual credits) are in [Limitations](#limitations).
+
 **At a glance** (live apps, Stripe test mode, full numbers and caveats in [How we tested reliability](#how-we-tested-reliability)):
 
 | 33 live runs per flow | TwiceShy | Same flow without TwiceShy |
@@ -46,7 +48,7 @@ TwiceShy is one orchestrator agent that settles the credit:
 2. **Code checks what Claude submits.** Every ID must exist in its app, HubSpot must link the company to that Stripe customer, the incident must list the company as affected, and the quoted promise must appear verbatim in the stated message by the stated author.
 3. **Policy decides the money.** SLA tier from HubSpot times severity from Linear gives the credit. Role caps apply to promises.
 4. **A guard returns PASS, HOLD or BLOCK** with reasons written for a CS manager: four checks before the card is posted, and a fifth on Approve.
-5. **A human approves in Slack.** Only listed approvers can press Approve, and never the person who made the promise. On Approve, TwiceShy re-reads Stripe, HubSpot and Linear and stops if anything changed since the card was posted.
+5. **A human approves in Slack.** Only listed approvers can press Approve, and by default never the person who made the promise (our demo workspace has one person, so the demo and eval turn that off with `ALLOW_SELF_APPROVAL=true`; the card you see shows the same account promising and approving). On Approve, TwiceShy re-reads Stripe, HubSpot and Linear and stops if anything changed since the card was posted.
 6. **A crash-safe runner executes** the Stripe credit, the HubSpot note and the Slack reply once each, across process restarts.
 
 A CS lead runs it on a thread once the customer asks for compensation (`npm run resolve`). A PASS card waits for one click. A HOLD card says why and who should confirm; after the thread is corrected, running TwiceShy on it again posts a new card. A BLOCK card says what already happened in Stripe, so nobody pays twice.
@@ -240,7 +242,7 @@ When a teammate credits Acme by hand in the Stripe dashboard after the card is p
 ### Limitations
 
 - The eval threads were written by us: s1 to s8 by the author, s9 to s11 by Claude (the coding agent) with fictional personas on both sides of the thread. HubSpot, Linear, Stripe and Slack are live and the final state is read back from those apps, but nobody outside the project wrote the language of the threads.
-- Each guard check has a scenario built for it, so the eval shows the checks fire on the cases they were designed for. It does not measure how often real threads hit them. The scenarios that test Claude's reading are s1, s2, s3, s8, s9, s10 and s11; s4, s6 and s7 mostly test code that does not depend on the model.
+- Each guard check has a scenario built for it, so the eval shows the checks fire on the cases they were designed for. It does not measure how often real threads hit them. The scenarios that test Claude's reading are s1, s2, s3, s8, s9, s10 and s11; s4, s5, s6 and s7 mostly test code that does not depend on the model.
 - The guard can only hold a promise Claude reports. If Claude left a promise out of its proposal, the case would pass at the policy amount. The amount is still the policy amount, never the promised one.
 - The eval calls the approval function directly instead of pressing the button in Slack (`postCards: false`). The Slack card and Socket Mode path are exercised in a logged live session ([docs/evidence](docs/evidence/2026-09-13-live-slack-session/README.md)) and the video, not in the eval numbers. Edits to the thread after the card was posted are not part of the stale-state check.
 - Customer and sales-teammate messages are posted by the Slack app under a display name, inside our workspace, to stand in for a Slack Connect channel. CSM messages are posted by a real user account, which is what the promise-authority check relies on. The workspace has one real person, so the eval and the demo set `ALLOW_SELF_APPROVAL=true` and that account is also the approver. The default blocks it.
