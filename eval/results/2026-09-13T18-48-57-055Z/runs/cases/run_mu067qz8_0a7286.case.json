@@ -1,0 +1,49 @@
+{
+  "runId": "run_mu067qz8_0a7286",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789325534.714029"
+  },
+  "createdAt": "2026-09-13T18:52:37.236Z",
+  "proposal": {
+    "kind": "ambiguous",
+    "candidates": [
+      {
+        "companyId": "58413899317",
+        "incidentId": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+        "why": "Vandelay Imports was affected by AVA-6 Checkout API outage on Sep 8, 2026"
+      },
+      {
+        "companyId": "58420738851",
+        "incidentId": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+        "why": "Vandelay Industries was affected by AVA-6 Checkout API outage on Sep 8, 2026"
+      }
+    ],
+    "question": "Is the customer Vandelay Imports (cus_VFo7uyayIJXKlE) or Vandelay Industries (cus_VFo7jP7I12YtYg)?"
+  },
+  "verificationDetail": "Is the customer Vandelay Imports (cus_VFo7uyayIJXKlE) or Vandelay Industries (cus_VFo7jP7I12YtYg)?",
+  "verdict": {
+    "status": "HOLD",
+    "reasons": [
+      "AMBIGUOUS"
+    ],
+    "checks": [],
+    "creditMinor": null
+  },
+  "snapshot": null,
+  "searches": [
+    {
+      "query": "Vandelay",
+      "matches": [
+        "Vandelay Imports",
+        "Vandelay Industries"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 13212,
+    "outputTokens": 1449,
+    "turns": 5,
+    "latencyMs": 36416
+  }
+}

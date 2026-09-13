@@ -1,0 +1,159 @@
+{
+  "runId": "run_mu069zal_4ee548",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789325638.045969"
+  },
+  "createdAt": "2026-09-13T18:54:13.062Z",
+  "proposal": {
+    "kind": "resolved",
+    "companyId": "58430635134",
+    "stripeCustomerId": "cus_VFo9xCr2yZtYqQ",
+    "incidentId": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+    "promise": {
+      "amountMinor": 200000,
+      "currency": "usd",
+      "authorUserId": "bot:B0C1MJ65DAQ",
+      "messageTs": "1789325638.233529",
+      "quote": "I will make sure you get $2,000 back for it."
+    },
+    "reasoning": "Pied Piper experienced the AVA-7 webhook delivery delays incident on Thursday morning September 10, 2026, matching Laurie's report of 40-minute late webhooks. Jordan Lee promised $2,000 in credit, which is the latest message in the thread.",
+    "evidence": [
+      {
+        "app": "slack",
+        "id": "1789325638.045969",
+        "quote": "Thursday morning every webhook arrived 40 minutes late. Our users noticed before we did."
+      },
+      {
+        "app": "slack",
+        "id": "1789325638.233529",
+        "quote": "I will make sure you get $2,000 back for it."
+      },
+      {
+        "app": "hubspot",
+        "id": "58430635134"
+      },
+      {
+        "app": "linear",
+        "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+        "quote": "Webhook delivery delays"
+      }
+    ]
+  },
+  "verdict": {
+    "status": "HOLD",
+    "reasons": [
+      "PROMISE_NOT_AUTHORIZED"
+    ],
+    "checks": [
+      {
+        "check": "duplicate_credit",
+        "ok": true,
+        "detail": "No credit issued yet for this incident",
+        "evidence": []
+      },
+      {
+        "check": "amount_vs_policy",
+        "ok": true,
+        "detail": "Policy credit $500",
+        "evidence": []
+      },
+      {
+        "check": "promise_authority",
+        "ok": false,
+        "reason": "PROMISE_NOT_AUTHORIZED",
+        "detail": "The customer mentions a promise, but no one on the team wrote it in the thread.",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789325638.233529",
+            "quote": "I will make sure you get $2,000 back for it."
+          }
+        ]
+      },
+      {
+        "check": "account_identity",
+        "ok": true,
+        "detail": "Pied Piper matches across HubSpot, Stripe and AVA-7",
+        "evidence": [
+          {
+            "app": "hubspot",
+            "id": "58430635134"
+          },
+          {
+            "app": "stripe",
+            "id": "cus_VFo9xCr2yZtYqQ"
+          },
+          {
+            "app": "linear",
+            "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4"
+          }
+        ]
+      }
+    ],
+    "creditMinor": 50000
+  },
+  "snapshot": {
+    "company": {
+      "id": "58430635134",
+      "name": "Pied Piper",
+      "slaTier": "premium",
+      "renewalDate": "2026-11-12",
+      "annualValueMinor": 3000000,
+      "stripeCustomerId": "cus_VFo9xCr2yZtYqQ"
+    },
+    "incident": {
+      "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+      "identifier": "AVA-7",
+      "title": "Webhook delivery delays",
+      "severity": "sev2",
+      "startedAt": "2026-09-10T09:00:00Z",
+      "resolvedAt": "2026-09-10T11:30:00Z",
+      "affectedCompanyIds": [
+        "58436208915",
+        "58430789728",
+        "58416226347",
+        "58423221645",
+        "58430635134"
+      ]
+    },
+    "thread": [
+      {
+        "ts": "1789325638.045969",
+        "threadTs": "1789325638.045969",
+        "userId": "bot:B0C1MJ65DAQ",
+        "authorName": "Laurie Bream (Pied Piper)",
+        "text": "Thursday morning every webhook arrived 40 minutes late. Our users noticed before we did."
+      },
+      {
+        "ts": "1789325638.233529",
+        "threadTs": "1789325638.045969",
+        "userId": "bot:B0C1MJ65DAQ",
+        "authorName": "Jordan Lee (Account Executive)",
+        "text": "Laurie, that is on us. I will make sure you get $2,000 back for it."
+      },
+      {
+        "ts": "1789325638.409299",
+        "threadTs": "1789325638.045969",
+        "userId": "U0C1MHQB4KE",
+        "text": "Hi Laurie, taking this over from Jordan so it gets handled properly. Checking your contract now."
+      }
+    ],
+    "credits": [],
+    "readAt": "2026-09-13T18:54:13.062Z"
+  },
+  "searches": [
+    {
+      "query": "Pied Piper",
+      "matches": [
+        "Pied Piper"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 10790,
+    "outputTokens": 1213,
+    "turns": 4,
+    "latencyMs": 28668
+  }
+}

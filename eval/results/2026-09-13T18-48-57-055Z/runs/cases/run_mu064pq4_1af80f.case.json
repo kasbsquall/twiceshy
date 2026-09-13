@@ -1,43 +1,43 @@
 {
-  "runId": "run_mu063u9g_7663c6",
+  "runId": "run_mu064pq4_1af80f",
   "thread": {
     "channelId": "C0C1D9X5B2R",
-    "threadTs": "1789325352.285999"
+    "threadTs": "1789325392.408709"
   },
-  "createdAt": "2026-09-13T18:49:24.097Z",
+  "createdAt": "2026-09-13T18:50:08.315Z",
   "proposal": {
     "kind": "resolved",
     "companyId": "58430789728",
-    "stripeCustomerId": "cus_VFo4uXlfqSluBm",
+    "stripeCustomerId": "cus_VFo5Ex3GR0nBwW",
     "incidentId": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
     "promise": {
       "amountMinor": 50000,
       "currency": "usd",
       "authorUserId": "U0C1MHQB4KE",
-      "messageTs": "1789325352.649469",
+      "messageTs": "1789325392.760519",
       "quote": "your plan gives you $500 for this incident, so that is what you will get"
     },
-    "reasoning": "Globex Shipping is the only company matching the thread, and incident AVA-7 (Webhook delivery delays on 2026-09-10) is the only incident affecting them that matches the webhook delay complaint. The final promise is $500 USD stated in the CSM's correction message.",
+    "reasoning": "Globex Shipping experienced webhook delivery delays on September 10, 2026 (incident AVA-7), matching the customer's complaint about webhooks being late and orders piling up. The company is confirmed in the incident's affected list. The latest promise is $500 in credit per the contract terms.",
     "evidence": [
       {
         "app": "slack",
-        "id": "1789325352.285999",
+        "id": "1789325392.408709",
         "quote": "Our webhooks were 40 minutes late on Thursday morning and orders piled up"
       },
       {
         "app": "slack",
-        "id": "1789325352.649469",
+        "id": "1789325392.760519",
         "quote": "your plan gives you $500 for this incident, so that is what you will get"
-      },
-      {
-        "app": "hubspot",
-        "id": "58430789728",
-        "quote": "Globex Shipping"
       },
       {
         "app": "linear",
         "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
         "quote": "Webhook delivery delays"
+      },
+      {
+        "app": "hubspot",
+        "id": "58430789728",
+        "quote": "Globex Shipping"
       }
     ]
   },
@@ -58,7 +58,7 @@
         "evidence": [
           {
             "app": "slack",
-            "id": "1789325352.649469",
+            "id": "1789325392.760519",
             "quote": "your plan gives you $500 for this incident, so that is what you will get"
           }
         ]
@@ -70,7 +70,7 @@
         "evidence": [
           {
             "app": "slack",
-            "id": "1789325352.649469"
+            "id": "1789325392.760519"
           }
         ]
       },
@@ -85,7 +85,7 @@
           },
           {
             "app": "stripe",
-            "id": "cus_VFo4uXlfqSluBm"
+            "id": "cus_VFo5Ex3GR0nBwW"
           },
           {
             "app": "linear",
@@ -103,7 +103,7 @@
       "slaTier": "premium",
       "renewalDate": "2026-11-30",
       "annualValueMinor": 3600000,
-      "stripeCustomerId": "cus_VFo4uXlfqSluBm"
+      "stripeCustomerId": "cus_VFo5Ex3GR0nBwW"
     },
     "incident": {
       "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
@@ -122,27 +122,27 @@
     },
     "thread": [
       {
-        "ts": "1789325352.285999",
-        "threadTs": "1789325352.285999",
+        "ts": "1789325392.408709",
+        "threadTs": "1789325392.408709",
         "userId": "bot:B0C1MJ65DAQ",
         "authorName": "Priya Shah (Globex)",
         "text": "Our webhooks were 40 minutes late on Thursday morning and orders piled up."
       },
       {
-        "ts": "1789325352.469709",
-        "threadTs": "1789325352.285999",
+        "ts": "1789325392.573069",
+        "threadTs": "1789325392.408709",
         "userId": "U0C1MHQB4KE",
         "text": "Sorry Priya. I can offer $250 in credit for that."
       },
       {
-        "ts": "1789325352.649469",
-        "threadTs": "1789325352.285999",
+        "ts": "1789325392.760519",
+        "threadTs": "1789325392.408709",
         "userId": "U0C1MHQB4KE",
         "text": "Correction after checking your contract: your plan gives you $500 for this incident, so that is what you will get."
       }
     ],
     "credits": [],
-    "readAt": "2026-09-13T18:49:24.079Z"
+    "readAt": "2026-09-13T18:50:08.315Z"
   },
   "searches": [
     {
@@ -153,14 +153,14 @@
     }
   ],
   "usage": {
-    "inputTokens": 10681,
-    "outputTokens": 1190,
+    "inputTokens": 10945,
+    "outputTokens": 1249,
     "turns": 4,
-    "latencyMs": 25573
+    "latencyMs": 29570
   },
   "approval": {
     "userId": "U0C1MHQB4KE",
-    "at": "2026-09-13T18:49:27.459Z",
+    "at": "2026-09-13T18:50:09.287Z",
     "snapshot": {
       "company": {
         "id": "58430789728",
@@ -168,7 +168,7 @@
         "slaTier": "premium",
         "renewalDate": "2026-11-30",
         "annualValueMinor": 3600000,
-        "stripeCustomerId": "cus_VFo4uXlfqSluBm"
+        "stripeCustomerId": "cus_VFo5Ex3GR0nBwW"
       },
       "incident": {
         "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
@@ -187,27 +187,27 @@
       },
       "thread": [
         {
-          "ts": "1789325352.285999",
-          "threadTs": "1789325352.285999",
+          "ts": "1789325392.408709",
+          "threadTs": "1789325392.408709",
           "userId": "bot:B0C1MJ65DAQ",
           "authorName": "Priya Shah (Globex)",
           "text": "Our webhooks were 40 minutes late on Thursday morning and orders piled up."
         },
         {
-          "ts": "1789325352.469709",
-          "threadTs": "1789325352.285999",
+          "ts": "1789325392.573069",
+          "threadTs": "1789325392.408709",
           "userId": "U0C1MHQB4KE",
           "text": "Sorry Priya. I can offer $250 in credit for that."
         },
         {
-          "ts": "1789325352.649469",
-          "threadTs": "1789325352.285999",
+          "ts": "1789325392.760519",
+          "threadTs": "1789325392.408709",
           "userId": "U0C1MHQB4KE",
           "text": "Correction after checking your contract: your plan gives you $500 for this incident, so that is what you will get."
         }
       ],
       "credits": [],
-      "readAt": "2026-09-13T18:49:27.458Z"
+      "readAt": "2026-09-13T18:50:09.287Z"
     },
     "verdict": {
       "status": "PASS",
@@ -226,7 +226,7 @@
           "evidence": [
             {
               "app": "slack",
-              "id": "1789325352.649469",
+              "id": "1789325392.760519",
               "quote": "your plan gives you $500 for this incident, so that is what you will get"
             }
           ]
@@ -238,7 +238,7 @@
           "evidence": [
             {
               "app": "slack",
-              "id": "1789325352.649469"
+              "id": "1789325392.760519"
             }
           ]
         },
@@ -253,7 +253,7 @@
             },
             {
               "app": "stripe",
-              "id": "cus_VFo4uXlfqSluBm"
+              "id": "cus_VFo5Ex3GR0nBwW"
             },
             {
               "app": "linear",
@@ -274,9 +274,9 @@
   "outcome": {
     "status": "done",
     "objects": {
-      "stripe_credit": "cbtxn_1UFITBQL5bFVYvXnSJVRCRaS",
-      "hubspot_note": "116810302495",
-      "slack_reply": "1789325382.137949"
+      "stripe_credit": "cbtxn_1UFITrQL5bFVYvXn1rBBRF0R",
+      "hubspot_note": "116825063507",
+      "slack_reply": "1789325423.881399"
     },
     "resumed": [],
     "creditMinor": 50000,

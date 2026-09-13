@@ -1,0 +1,285 @@
+{
+  "runId": "run_mu0678uq_573c76",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789325510.616739"
+  },
+  "createdAt": "2026-09-13T18:52:07.310Z",
+  "proposal": {
+    "kind": "resolved",
+    "companyId": "58430945069",
+    "stripeCustomerId": "cus_VFo7n88luKYb5Z",
+    "incidentId": "70ed3f90-670c-4f82-b67f-3fdd95cf00d6",
+    "promise": {
+      "amountMinor": 50000,
+      "currency": "usd",
+      "authorUserId": "U0C1MHQB4KE",
+      "messageTs": "1789325510.773299",
+      "quote": "We are adding a $500 credit for the login outage."
+    },
+    "reasoning": "Hooli Payments is the only company matching the thread (Gavin from Hooli), and incident AVA-8 is the Dashboard login outage on September 9, 2026 that lasted exactly 2 hours and affected this company. The CSM promised $500 in the second message.",
+    "evidence": [
+      {
+        "app": "slack",
+        "id": "1789325510.616739",
+        "quote": "Nobody on our side could log in to the dashboard on Wednesday for two hours."
+      },
+      {
+        "app": "slack",
+        "id": "1789325510.773299",
+        "quote": "We are adding a $500 credit for the login outage."
+      },
+      {
+        "app": "hubspot",
+        "id": "58430945069",
+        "quote": "Hooli Payments"
+      },
+      {
+        "app": "linear",
+        "id": "70ed3f90-670c-4f82-b67f-3fdd95cf00d6",
+        "quote": "Dashboard login outage"
+      }
+    ]
+  },
+  "verdict": {
+    "status": "PASS",
+    "reasons": [],
+    "checks": [
+      {
+        "check": "duplicate_credit",
+        "ok": true,
+        "detail": "No credit issued yet for this incident",
+        "evidence": []
+      },
+      {
+        "check": "amount_vs_policy",
+        "ok": true,
+        "detail": "Promise matches policy: $500",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789325510.773299",
+            "quote": "We are adding a $500 credit for the login outage."
+          }
+        ]
+      },
+      {
+        "check": "promise_authority",
+        "ok": true,
+        "detail": "Promise written by an internal team member",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789325510.773299"
+          }
+        ]
+      },
+      {
+        "check": "account_identity",
+        "ok": true,
+        "detail": "Hooli Payments matches across HubSpot, Stripe and AVA-8",
+        "evidence": [
+          {
+            "app": "hubspot",
+            "id": "58430945069"
+          },
+          {
+            "app": "stripe",
+            "id": "cus_VFo7n88luKYb5Z"
+          },
+          {
+            "app": "linear",
+            "id": "70ed3f90-670c-4f82-b67f-3fdd95cf00d6"
+          }
+        ]
+      }
+    ],
+    "creditMinor": 50000
+  },
+  "snapshot": {
+    "company": {
+      "id": "58430945069",
+      "name": "Hooli Payments",
+      "slaTier": "standard",
+      "renewalDate": "2027-02-10",
+      "annualValueMinor": 900000,
+      "stripeCustomerId": "cus_VFo7n88luKYb5Z"
+    },
+    "incident": {
+      "id": "70ed3f90-670c-4f82-b67f-3fdd95cf00d6",
+      "identifier": "AVA-8",
+      "title": "Dashboard login outage",
+      "severity": "sev1",
+      "startedAt": "2026-09-09T16:00:00Z",
+      "resolvedAt": "2026-09-09T18:00:00Z",
+      "affectedCompanyIds": [
+        "58430945069"
+      ]
+    },
+    "thread": [
+      {
+        "ts": "1789325510.616739",
+        "threadTs": "1789325510.616739",
+        "userId": "bot:B0C1MJ65DAQ",
+        "authorName": "Gavin B. (Hooli)",
+        "text": "Nobody on our side could log in to the dashboard on Wednesday for two hours."
+      },
+      {
+        "ts": "1789325510.773299",
+        "threadTs": "1789325510.616739",
+        "userId": "U0C1MHQB4KE",
+        "text": "That was on us, Gavin. We are adding a $500 credit for the login outage."
+      }
+    ],
+    "credits": [
+      {
+        "id": "cbtxn_1UFIVGQL5bFVYvXnDv2fGzLk",
+        "kind": "balance_transaction",
+        "amountMinor": 50000,
+        "createdAt": "2026-09-13T18:51:50.000Z",
+        "metadata": {
+          "incident_id": "348f9be4-57e4-4e79-9dc0-de1f84aa3894"
+        }
+      }
+    ],
+    "readAt": "2026-09-13T18:52:07.310Z"
+  },
+  "searches": [
+    {
+      "query": "Hooli",
+      "matches": [
+        "Hooli Payments"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 12668,
+    "outputTokens": 1089,
+    "turns": 5,
+    "latencyMs": 30270
+  },
+  "approval": {
+    "userId": "U0C1MHQB4KE",
+    "at": "2026-09-13T18:52:08.673Z",
+    "snapshot": {
+      "company": {
+        "id": "58430945069",
+        "name": "Hooli Payments",
+        "slaTier": "standard",
+        "renewalDate": "2027-02-10",
+        "annualValueMinor": 900000,
+        "stripeCustomerId": "cus_VFo7n88luKYb5Z"
+      },
+      "incident": {
+        "id": "70ed3f90-670c-4f82-b67f-3fdd95cf00d6",
+        "identifier": "AVA-8",
+        "title": "Dashboard login outage",
+        "severity": "sev1",
+        "startedAt": "2026-09-09T16:00:00Z",
+        "resolvedAt": "2026-09-09T18:00:00Z",
+        "affectedCompanyIds": [
+          "58430945069"
+        ]
+      },
+      "thread": [
+        {
+          "ts": "1789325510.616739",
+          "threadTs": "1789325510.616739",
+          "userId": "bot:B0C1MJ65DAQ",
+          "authorName": "Gavin B. (Hooli)",
+          "text": "Nobody on our side could log in to the dashboard on Wednesday for two hours."
+        },
+        {
+          "ts": "1789325510.773299",
+          "threadTs": "1789325510.616739",
+          "userId": "U0C1MHQB4KE",
+          "text": "That was on us, Gavin. We are adding a $500 credit for the login outage."
+        }
+      ],
+      "credits": [
+        {
+          "id": "cbtxn_1UFIVGQL5bFVYvXnDv2fGzLk",
+          "kind": "balance_transaction",
+          "amountMinor": 50000,
+          "createdAt": "2026-09-13T18:51:50.000Z",
+          "metadata": {
+            "incident_id": "348f9be4-57e4-4e79-9dc0-de1f84aa3894"
+          }
+        }
+      ],
+      "readAt": "2026-09-13T18:52:08.672Z"
+    },
+    "verdict": {
+      "status": "PASS",
+      "reasons": [],
+      "checks": [
+        {
+          "check": "duplicate_credit",
+          "ok": true,
+          "detail": "No credit issued yet for this incident",
+          "evidence": []
+        },
+        {
+          "check": "amount_vs_policy",
+          "ok": true,
+          "detail": "Promise matches policy: $500",
+          "evidence": [
+            {
+              "app": "slack",
+              "id": "1789325510.773299",
+              "quote": "We are adding a $500 credit for the login outage."
+            }
+          ]
+        },
+        {
+          "check": "promise_authority",
+          "ok": true,
+          "detail": "Promise written by an internal team member",
+          "evidence": [
+            {
+              "app": "slack",
+              "id": "1789325510.773299"
+            }
+          ]
+        },
+        {
+          "check": "account_identity",
+          "ok": true,
+          "detail": "Hooli Payments matches across HubSpot, Stripe and AVA-8",
+          "evidence": [
+            {
+              "app": "hubspot",
+              "id": "58430945069"
+            },
+            {
+              "app": "stripe",
+              "id": "cus_VFo7n88luKYb5Z"
+            },
+            {
+              "app": "linear",
+              "id": "70ed3f90-670c-4f82-b67f-3fdd95cf00d6"
+            }
+          ]
+        },
+        {
+          "check": "stale_state",
+          "ok": true,
+          "detail": "Nothing changed since the card was posted",
+          "evidence": []
+        }
+      ],
+      "creditMinor": 50000
+    }
+  },
+  "outcome": {
+    "status": "done",
+    "objects": {
+      "stripe_credit": "cbtxn_1UFIVmQL5bFVYvXnq2WFTvUo",
+      "hubspot_note": "116816246189",
+      "slack_reply": "1789325543.303729"
+    },
+    "resumed": [],
+    "creditMinor": 50000,
+    "reasons": []
+  }
+}

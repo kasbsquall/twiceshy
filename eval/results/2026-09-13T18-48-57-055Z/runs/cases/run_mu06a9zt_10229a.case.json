@@ -1,0 +1,291 @@
+{
+  "runId": "run_mu06a9zt_10229a",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789325651.990289"
+  },
+  "createdAt": "2026-09-13T18:54:31.331Z",
+  "proposal": {
+    "kind": "resolved",
+    "companyId": "58433412938",
+    "stripeCustomerId": "cus_VFo9zmqwwqvXPH",
+    "incidentId": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+    "promise": {
+      "amountMinor": 100000,
+      "currency": "usd",
+      "authorUserId": "U0C1MHQB4KE",
+      "messageTs": "1789325652.338589",
+      "quote": "you are on Premium, which gives you $1,000 for the Tuesday checkout outage. That is what we will credit."
+    },
+    "reasoning": "Soylent Foods (Premium SLA tier) is the only company mentioned and matches the affected companies in AVA-6 Checkout API outage. The CSM confirmed a $1,000 credit for the Tuesday checkout outage in the final message, overriding the customer's initial claim of Enterprise tier.",
+    "evidence": [
+      {
+        "app": "slack",
+        "id": "1789325651.990289",
+        "quote": "The Tuesday checkout outage cost us the lunch rush."
+      },
+      {
+        "app": "slack",
+        "id": "1789325652.338589",
+        "quote": "you are on Premium, which gives you $1,000 for the Tuesday checkout outage. That is what we will credit."
+      },
+      {
+        "app": "hubspot",
+        "id": "58433412938",
+        "quote": "Soylent Foods, slaTier: premium"
+      },
+      {
+        "app": "linear",
+        "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+        "quote": "Checkout API outage, started 2026-09-08T14:00:00Z"
+      }
+    ]
+  },
+  "verdict": {
+    "status": "PASS",
+    "reasons": [],
+    "checks": [
+      {
+        "check": "duplicate_credit",
+        "ok": true,
+        "detail": "No credit issued yet for this incident",
+        "evidence": []
+      },
+      {
+        "check": "amount_vs_policy",
+        "ok": true,
+        "detail": "Promise matches policy: $1,000",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789325652.338589",
+            "quote": "you are on Premium, which gives you $1,000 for the Tuesday checkout outage. That is what we will credit."
+          }
+        ]
+      },
+      {
+        "check": "promise_authority",
+        "ok": true,
+        "detail": "Promise written by an internal team member",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789325652.338589"
+          }
+        ]
+      },
+      {
+        "check": "account_identity",
+        "ok": true,
+        "detail": "Soylent Foods matches across HubSpot, Stripe and AVA-6",
+        "evidence": [
+          {
+            "app": "hubspot",
+            "id": "58433412938"
+          },
+          {
+            "app": "stripe",
+            "id": "cus_VFo9zmqwwqvXPH"
+          },
+          {
+            "app": "linear",
+            "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad"
+          }
+        ]
+      }
+    ],
+    "creditMinor": 100000
+  },
+  "snapshot": {
+    "company": {
+      "id": "58433412938",
+      "name": "Soylent Foods",
+      "slaTier": "premium",
+      "renewalDate": "2026-12-15",
+      "annualValueMinor": 4200000,
+      "stripeCustomerId": "cus_VFo9zmqwwqvXPH"
+    },
+    "incident": {
+      "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+      "identifier": "AVA-6",
+      "title": "Checkout API outage",
+      "severity": "sev1",
+      "startedAt": "2026-09-08T14:00:00Z",
+      "resolvedAt": "2026-09-08T17:10:00Z",
+      "affectedCompanyIds": [
+        "58445344385",
+        "58426002498",
+        "58424616243",
+        "58413899317",
+        "58420738851",
+        "58430945350",
+        "58433412938"
+      ]
+    },
+    "thread": [
+      {
+        "ts": "1789325651.990289",
+        "threadTs": "1789325651.990289",
+        "userId": "bot:B0C1MJ65DAQ",
+        "authorName": "Grace Kim (Soylent, Ops)",
+        "text": "The Tuesday checkout outage cost us the lunch rush. We are on Enterprise, so we expect the enterprise credit."
+      },
+      {
+        "ts": "1789325652.150329",
+        "threadTs": "1789325651.990289",
+        "userId": "bot:B0C1MJ65DAQ",
+        "authorName": "Ben Ortiz (Soylent, Finance)",
+        "text": "There was also the webhook delay on Thursday, but that one did not touch our account."
+      },
+      {
+        "ts": "1789325652.338589",
+        "threadTs": "1789325651.990289",
+        "userId": "U0C1MHQB4KE",
+        "text": "Grace, Ben, I checked your contract: you are on Premium, which gives you $1,000 for the Tuesday checkout outage. That is what we will credit."
+      }
+    ],
+    "credits": [],
+    "readAt": "2026-09-13T18:54:31.331Z"
+  },
+  "searches": [
+    {
+      "query": "Soylent",
+      "matches": [
+        "Soylent Foods"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 14292,
+    "outputTokens": 1214,
+    "turns": 5,
+    "latencyMs": 33006
+  },
+  "approval": {
+    "userId": "U0C1MHQB4KE",
+    "at": "2026-09-13T18:54:32.686Z",
+    "snapshot": {
+      "company": {
+        "id": "58433412938",
+        "name": "Soylent Foods",
+        "slaTier": "premium",
+        "renewalDate": "2026-12-15",
+        "annualValueMinor": 4200000,
+        "stripeCustomerId": "cus_VFo9zmqwwqvXPH"
+      },
+      "incident": {
+        "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+        "identifier": "AVA-6",
+        "title": "Checkout API outage",
+        "severity": "sev1",
+        "startedAt": "2026-09-08T14:00:00Z",
+        "resolvedAt": "2026-09-08T17:10:00Z",
+        "affectedCompanyIds": [
+          "58445344385",
+          "58426002498",
+          "58424616243",
+          "58413899317",
+          "58420738851",
+          "58430945350",
+          "58433412938"
+        ]
+      },
+      "thread": [
+        {
+          "ts": "1789325651.990289",
+          "threadTs": "1789325651.990289",
+          "userId": "bot:B0C1MJ65DAQ",
+          "authorName": "Grace Kim (Soylent, Ops)",
+          "text": "The Tuesday checkout outage cost us the lunch rush. We are on Enterprise, so we expect the enterprise credit."
+        },
+        {
+          "ts": "1789325652.150329",
+          "threadTs": "1789325651.990289",
+          "userId": "bot:B0C1MJ65DAQ",
+          "authorName": "Ben Ortiz (Soylent, Finance)",
+          "text": "There was also the webhook delay on Thursday, but that one did not touch our account."
+        },
+        {
+          "ts": "1789325652.338589",
+          "threadTs": "1789325651.990289",
+          "userId": "U0C1MHQB4KE",
+          "text": "Grace, Ben, I checked your contract: you are on Premium, which gives you $1,000 for the Tuesday checkout outage. That is what we will credit."
+        }
+      ],
+      "credits": [],
+      "readAt": "2026-09-13T18:54:32.686Z"
+    },
+    "verdict": {
+      "status": "PASS",
+      "reasons": [],
+      "checks": [
+        {
+          "check": "duplicate_credit",
+          "ok": true,
+          "detail": "No credit issued yet for this incident",
+          "evidence": []
+        },
+        {
+          "check": "amount_vs_policy",
+          "ok": true,
+          "detail": "Promise matches policy: $1,000",
+          "evidence": [
+            {
+              "app": "slack",
+              "id": "1789325652.338589",
+              "quote": "you are on Premium, which gives you $1,000 for the Tuesday checkout outage. That is what we will credit."
+            }
+          ]
+        },
+        {
+          "check": "promise_authority",
+          "ok": true,
+          "detail": "Promise written by an internal team member",
+          "evidence": [
+            {
+              "app": "slack",
+              "id": "1789325652.338589"
+            }
+          ]
+        },
+        {
+          "check": "account_identity",
+          "ok": true,
+          "detail": "Soylent Foods matches across HubSpot, Stripe and AVA-6",
+          "evidence": [
+            {
+              "app": "hubspot",
+              "id": "58433412938"
+            },
+            {
+              "app": "stripe",
+              "id": "cus_VFo9zmqwwqvXPH"
+            },
+            {
+              "app": "linear",
+              "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad"
+            }
+          ]
+        },
+        {
+          "check": "stale_state",
+          "ok": true,
+          "detail": "Nothing changed since the card was posted",
+          "evidence": []
+        }
+      ],
+      "creditMinor": 100000
+    }
+  },
+  "outcome": {
+    "status": "done",
+    "objects": {
+      "stripe_credit": "cbtxn_1UFIY6QL5bFVYvXndB9XEPnb",
+      "hubspot_note": "116864313012",
+      "slack_reply": "1789325687.326219"
+    },
+    "resumed": [],
+    "creditMinor": 100000,
+    "reasons": []
+  }
+}

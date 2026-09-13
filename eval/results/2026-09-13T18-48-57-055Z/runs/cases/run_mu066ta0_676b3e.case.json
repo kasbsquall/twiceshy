@@ -1,0 +1,49 @@
+{
+  "runId": "run_mu066ta0_676b3e",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789325491.472479"
+  },
+  "createdAt": "2026-09-13T18:51:48.603Z",
+  "proposal": {
+    "kind": "ambiguous",
+    "candidates": [
+      {
+        "companyId": "58413899317",
+        "incidentId": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+        "why": "Vandelay Imports was affected by the Checkout API outage (AVA-6)"
+      },
+      {
+        "companyId": "58420738851",
+        "incidentId": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+        "why": "Vandelay Industries was affected by the Checkout API outage (AVA-6)"
+      }
+    ],
+    "question": "Is the customer Art representing Vandelay Imports or Vandelay Industries?"
+  },
+  "verificationDetail": "Is the customer Art representing Vandelay Imports or Vandelay Industries?",
+  "verdict": {
+    "status": "HOLD",
+    "reasons": [
+      "AMBIGUOUS"
+    ],
+    "checks": [],
+    "creditMinor": null
+  },
+  "snapshot": null,
+  "searches": [
+    {
+      "query": "Vandelay",
+      "matches": [
+        "Vandelay Imports",
+        "Vandelay Industries"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 9673,
+    "outputTokens": 1301,
+    "turns": 4,
+    "latencyMs": 30905
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "runId": "run_mu064sdf_837abb",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789325396.585269"
+  },
+  "createdAt": "2026-09-13T18:50:17.962Z",
+  "proposal": {
+    "kind": "resolved",
+    "companyId": "58445344385",
+    "stripeCustomerId": "cus_VFo5YD88LWNpMs",
+    "incidentId": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+    "promise": {
+      "amountMinor": 100000,
+      "currency": "usd",
+      "authorUserId": "U0C1MHQB4KE",
+      "messageTs": "1789325396.767729",
+      "quote": "a thousand bucks"
+    },
+    "reasoning": "Acme Inc experienced the Checkout API outage (AVA-6) on September 8, 2026 from 14:00-17:10 UTC (~3 hours), matching the customer's report of checkout downtime on Tuesday afternoon. This is the only company-incident pair that fits the evidence.",
+    "evidence": [
+      {
+        "app": "slack",
+        "id": "1789325396.585269",
+        "quote": "the outage on Tuesday afternoon took our checkout down for about three hours"
+      },
+      {
+        "app": "slack",
+        "id": "1789325396.767729",
+        "quote": "a thousand bucks in credit"
+      },
+      {
+        "app": "linear",
+        "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+        "quote": "Checkout API outage, 2026-09-08T14:00:00Z to 2026-09-08T17:10:00Z"
+      },
+      {
+        "app": "hubspot",
+        "id": "58445344385",
+        "quote": "Acme Inc"
+      }
+    ]
+  },
+  "verdict": {
+    "status": "BLOCK",
+    "reasons": [
+      "AMOUNT_VS_POLICY",
+      "ACCOUNT_IDENTITY_MISMATCH"
+    ],
+    "checks": [
+      {
+        "check": "duplicate_credit",
+        "ok": true,
+        "detail": "No credit issued yet for this incident",
+        "evidence": []
+      },
+      {
+        "check": "amount_vs_policy",
+        "ok": false,
+        "reason": "AMOUNT_VS_POLICY",
+        "detail": "Promised $1,000 but the SLA policy gives $500.",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789325396.767729",
+            "quote": "a thousand bucks"
+          }
+        ]
+      },
+      {
+        "check": "promise_authority",
+        "ok": true,
+        "detail": "Promise written by an internal team member",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789325396.767729"
+          }
+        ]
+      },
+      {
+        "check": "account_identity",
+        "ok": false,
+        "reason": "ACCOUNT_IDENTITY_MISMATCH",
+        "detail": "AVA-7 does not list Acme Inc as affected.",
+        "evidence": [
+          {
+            "app": "hubspot",
+            "id": "58445344385"
+          },
+          {
+            "app": "linear",
+            "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4"
+          }
+        ]
+      }
+    ],
+    "creditMinor": 50000
+  },
+  "snapshot": {
+    "company": {
+      "id": "58445344385",
+      "name": "Acme Inc",
+      "slaTier": "premium",
+      "renewalDate": "2026-10-24",
+      "annualValueMinor": 4800000,
+      "stripeCustomerId": "cus_VFo5YD88LWNpMs"
+    },
+    "incident": {
+      "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+      "identifier": "AVA-7",
+      "title": "Webhook delivery delays",
+      "severity": "sev2",
+      "startedAt": "2026-09-10T09:00:00Z",
+      "resolvedAt": "2026-09-10T11:30:00Z",
+      "affectedCompanyIds": [
+        "58436208915",
+        "58430789728",
+        "58416226347",
+        "58423221645",
+        "58430635134"
+      ]
+    },
+    "thread": [
+      {
+        "ts": "1789325396.585269",
+        "threadTs": "1789325396.585269",
+        "userId": "bot:B0C1MJ65DAQ",
+        "authorName": "Dana Ruiz (Acme)",
+        "text": "Hi team, the outage on Tuesday afternoon took our checkout down for about three hours. That hurt."
+      },
+      {
+        "ts": "1789325396.767729",
+        "threadTs": "1789325396.585269",
+        "userId": "U0C1MHQB4KE",
+        "text": "Dana, I'm really sorry. We'll make it right with a thousand bucks in credit on your account."
+      }
+    ],
+    "credits": [],
+    "readAt": "2026-09-13T18:50:17.962Z"
+  },
+  "searches": [
+    {
+      "query": "acme",
+      "matches": [
+        "Acme Corp",
+        "Acme Inc"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 13446,
+    "outputTokens": 1468,
+    "turns": 5,
+    "latencyMs": 35191
+  }
+}
