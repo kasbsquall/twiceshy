@@ -37,6 +37,19 @@ TwiceShy is one orchestrator agent that settles the credit:
 
 A CS lead runs it on a thread once the customer asks for compensation (`npm run resolve`). A PASS card waits for one click. A HOLD card says why and who should confirm; after the thread is corrected, running TwiceShy on it again posts a new card. A BLOCK card says what already happened in Stripe, so nobody pays twice.
 
+### Why this matters
+
+Each piece of this problem is documented in public, even if nobody we could find has written up the exact Slack-thread case:
+
+- **SLA credits are handled by hand.** AWS says "you must submit a claim by opening a case in the AWS Support Center" ([Amazon Compute SLA](https://aws.amazon.com/compute/sla/)), and Azure customers ask how to claim one at all ([Microsoft Q&A](https://learn.microsoft.com/en-us/answers/questions/5603494/how-to-request-a-sla-credit-in-azure)).
+- **Two people or two channels act on the same request.** A merchant who refunded a customer after the bank had already reversed the charge: "we paid the money twice." ([Shopify Community](https://community.shopify.com/t/how-can-i-recover-a-double-refunded-payment/236141), anecdotal). Support teams ask for help because "two of our support agents instantly reply" ([Zendesk Community](https://community.zendesk.com/fid-8/tid-15923), anecdotal); Zendesk's collision warning only covers its own ticket view, not a Slack thread plus the Stripe dashboard.
+- **A crash leaves you not knowing whether the money moved.** Stripe: clients "don't know whether or not the server received the request" after a network failure, and idempotency keys expire after 24 hours ([Stripe docs](https://docs.stripe.com/error-low-level)). At bank scale, Santander said payments were "incorrectly duplicated", about 75,000 of them ([NBC News](https://www.nbcnews.com/business/business-news/bank-accidentally-deposits-176-million-peoples-accounts-christmas-day-rcna10538)).
+- **AI agents with real side effects need a human gate.** OWASP asks to "require a human to approve high-impact actions before they are taken" ([LLM06:2025 Excessive Agency](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/)). In Moffatt v. Air Canada the airline was held to a refund its chatbot promised ([McCarthy Tétrault](https://www.mccarthy.ca/en/insights/blogs/techlex/moffatt-v-air-canada-misrepresentation-ai-chatbot)).
+
+**What is new here.** Stripe's idempotency key protects one API request for 24 hours, and our own baseline shows it works: 0 duplicate Stripe credits. It cannot see a credit a teammate made by hand in the dashboard, a promise from someone not allowed to make it, or a reply that was never sent because the process died after paying. TwiceShy guards the agent's side effects across people, apps and restarts, with a human approving and code, not the model, deciding the money.
+
+Sources and verbatim quotes, with dates: [docs/research-usefulness.md](docs/research-usefulness.md).
+
 ### Architecture
 
 ```mermaid
