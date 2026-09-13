@@ -20,6 +20,20 @@
 
 Slack, HubSpot, Linear and Stripe, orchestrated by one Claude agent.
 
+**At a glance** (live apps, Stripe test mode, full numbers and caveats in [How we tested reliability](#how-we-tested-reliability)):
+
+| 33 live runs per flow | TwiceShy | Same flow without TwiceShy |
+|---|---|---|
+| Scenarios that depend on Claude reading the thread (s1, s2, s3, s8, s9, s10, s11): correct outcome | 21 of 21 | 6 of 21 |
+| Scenarios decided mostly by code: earlier credits, the teammate race, the crash (s4, s5, s6, s7): correct outcome | 12 of 12 | 4 of 12 |
+| Runs that credited the wrong account, more than owed, or twice | 0 of 33 | 12 of 33 |
+
+The comparison flow cannot hold or block a case, so it loses those scenarios by construction; the table in the reliability section separates that from money it actually credited wrongly.
+
+<img src="docs/evidence/2026-09-13-live-slack-session/slack-card-stopped.png" alt="Live Slack card: Stopped, Acme Inc was already credited $1,000. Nothing was credited and no reply was sent." width="49%"> <img src="docs/evidence/2026-09-13-live-slack-session/slack-card-credited-after-crash.png" alt="Live Slack card after a real crash and restart: Credited $1,000 to Wayne Retail, resumed after an interruption, nothing was done twice." width="49%">
+
+Left: a teammate credited Acme by hand first, so Approve stopped. Right: the server was killed after Stripe accepted the credit, and the restart finished the job once. Try it with no keys: `npm ci && npm run demo:offline -- --scenario s7-crash`.
+
 [![ci](https://github.com/kasbsquall/twiceshy/actions/workflows/ci.yml/badge.svg)](https://github.com/kasbsquall/twiceshy/actions/workflows/ci.yml) Demo video: [link at the bottom](#demo-video)
 
 ## What we built
@@ -44,7 +58,7 @@ Each piece of this problem is documented in public, even if nobody we could find
 - **SLA credits are handled by hand.** AWS says "you must submit a claim by opening a case in the AWS Support Center" ([Amazon Compute SLA](https://aws.amazon.com/compute/sla/)), and Azure customers ask how to claim one at all ([Microsoft Q&A](https://learn.microsoft.com/en-us/answers/questions/5603494/how-to-request-a-sla-credit-in-azure)).
 - **Money goes out twice when two channels act on the same debt.** A merchant refunded a customer whose bank had already processed a chargeback: "we paid the money twice." ([Shopify Community](https://community.shopify.com/t/how-can-i-recover-a-double-refunded-payment/236141), anecdotal). Support teams ask for help because "two of our support agents instantly reply" ([Zendesk Community](https://community.zendesk.com/fid-8/tid-15923), anecdotal); Zendesk's collision warning only covers its own ticket view, not a Slack thread plus the Stripe dashboard.
 - **A crash leaves you not knowing whether the money moved.** Stripe: clients "don't know whether or not the server received the request" after a network failure, and idempotency keys expire after 24 hours ([Stripe docs](https://docs.stripe.com/error-low-level)). Duplicate payouts also happen at scale for other reasons: Santander said about 75,000 payments were "incorrectly duplicated" after a scheduling issue ([NBC News](https://www.nbcnews.com/business/business-news/bank-accidentally-deposits-176-million-peoples-accounts-christmas-day-rcna10538)).
-- **AI agents with real side effects need a human gate.** OWASP asks to "require a human to approve high-impact actions before they are taken" ([LLM06:2025 Excessive Agency](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/)). And promises cost money: in Moffatt v. Air Canada the airline was held to a refund its chatbot promised ([McCarthy Tétrault](https://www.mccarthy.ca/en/insights/blogs/techlex/moffatt-v-air-canada-misrepresentation-ai-chatbot)). TwiceShy's authority check is about promises people make in a thread, which is a related risk, not the same one.
+- **AI agents with real side effects need a human gate.** OWASP asks to "require a human to approve high-impact actions before they are taken" ([LLM06:2025 Excessive Agency](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/)). And promises cost money: in Moffatt v. Air Canada the airline was held to a refund its chatbot promised ([McCarthy Tetrault](https://www.mccarthy.ca/en/insights/blogs/techlex/moffatt-v-air-canada-misrepresentation-ai-chatbot)). TwiceShy's authority check is about promises people make in a thread, which is a related risk, not the same one.
 
 **Closest existing tools, and what they do not cover.**
 

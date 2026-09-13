@@ -29,7 +29,7 @@ Researched 2026-09-13. Every quote below was read on the source page; quotes are
 5. **CNBC via NBC News, Sam Shead, 2021-12-31** (reputable press)
    https://www.nbcnews.com/business/business-news/bank-accidentally-deposits-176-million-peoples-accounts-christmas-day-rcna10538
    "Some payments from our corporate clients were incorrectly duplicated" (Santander statement)
-   About 75,000 payments, £130m, paid twice because of a "scheduling issue". A different cause than a crash and retry; shown for scale only.
+   About 75,000 payments, GBP 130m, paid twice because of a "scheduling issue". A different cause than a crash and retry; shown for scale only.
 
 ## Theme 3. SLA credits are manual and must be chased
 
@@ -56,7 +56,7 @@ Honest gap: I found no public post that describes a customer success team promis
    "despite receiving repeated instructions not to make changes"
    The Replit agent deleted a production database during a code freeze. An agent ignored its limits on a real side effect.
 
-10. **McCarthy Tétrault TechLex, Barry B. Sookman, 2024-02-19** (law firm analysis of Moffatt v. Air Canada)
+10. **McCarthy Tetrault TechLex, Barry B. Sookman, 2024-02-19** (law firm analysis of Moffatt v. Air Canada)
     https://www.mccarthy.ca/en/insights/blogs/techlex/moffatt-v-air-canada-misrepresentation-ai-chatbot
     "the airline was responsible for all information provided, including that from the chatbot"
     A company was held to a refund its chatbot promised. Unauthorized promises carry financial liability.
