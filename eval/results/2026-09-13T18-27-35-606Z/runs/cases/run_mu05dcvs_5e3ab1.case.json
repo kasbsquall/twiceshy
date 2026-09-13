@@ -1,0 +1,49 @@
+{
+  "runId": "run_mu05dcvs_5e3ab1",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789324116.661819"
+  },
+  "createdAt": "2026-09-13T18:28:57.043Z",
+  "proposal": {
+    "kind": "ambiguous",
+    "candidates": [
+      {
+        "companyId": "58413899317",
+        "incidentId": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+        "why": "Vandelay Imports was affected by the Checkout API outage on September 8, 2026 (Tuesday)"
+      },
+      {
+        "companyId": "58420738851",
+        "incidentId": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+        "why": "Vandelay Industries was affected by the Checkout API outage on September 8, 2026 (Tuesday)"
+      }
+    ],
+    "question": "Which Vandelay entity (Imports or Industries) is the customer in this Slack thread?"
+  },
+  "verificationDetail": "Which Vandelay entity (Imports or Industries) is the customer in this Slack thread?",
+  "verdict": {
+    "status": "HOLD",
+    "reasons": [
+      "AMBIGUOUS"
+    ],
+    "checks": [],
+    "creditMinor": null
+  },
+  "snapshot": null,
+  "searches": [
+    {
+      "query": "Vandelay",
+      "matches": [
+        "Vandelay Imports",
+        "Vandelay Industries"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 11063,
+    "outputTokens": 1888,
+    "turns": 4,
+    "latencyMs": 34197
+  }
+}

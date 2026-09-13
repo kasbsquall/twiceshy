@@ -1,0 +1,294 @@
+{
+  "runId": "run_mu05dbmy_438d2f",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789324114.383899"
+  },
+  "createdAt": "2026-09-13T18:28:50.148Z",
+  "proposal": {
+    "kind": "resolved",
+    "companyId": "58423221645",
+    "stripeCustomerId": "cus_VFnkc6nOAu4yyr",
+    "incidentId": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+    "promise": {
+      "amountMinor": 100000,
+      "currency": "usd",
+      "authorUserId": "U0C1MHQB4KE",
+      "messageTs": "1789324114.538169",
+      "quote": "we will credit Stark $1,000 for Thursday"
+    },
+    "reasoning": "Stark Logistics is the company referenced in the thread (\"Stark\"). The webhook delivery delays incident (AVA-7) on 2026-09-10 matches the customer complaint about \"Thursday webhook delays\". A $1,000 credit was promised by the support team for this incident.",
+    "evidence": [
+      {
+        "app": "slack",
+        "id": "1789324114.383899",
+        "quote": "Thursday webhook delays again. Our dispatch team was flying blind."
+      },
+      {
+        "app": "slack",
+        "id": "1789324114.538169",
+        "quote": "we will credit Stark $1,000 for Thursday"
+      },
+      {
+        "app": "hubspot",
+        "id": "58423221645",
+        "quote": "Stark Logistics"
+      },
+      {
+        "app": "linear",
+        "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+        "quote": "Webhook delivery delays"
+      }
+    ]
+  },
+  "verdict": {
+    "status": "PASS",
+    "reasons": [],
+    "checks": [
+      {
+        "check": "duplicate_credit",
+        "ok": true,
+        "detail": "No credit issued yet for this incident",
+        "evidence": []
+      },
+      {
+        "check": "amount_vs_policy",
+        "ok": true,
+        "detail": "Promise matches policy: $1,000",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789324114.538169",
+            "quote": "we will credit Stark $1,000 for Thursday"
+          }
+        ]
+      },
+      {
+        "check": "promise_authority",
+        "ok": true,
+        "detail": "Promise written by an internal team member",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789324114.538169"
+          }
+        ]
+      },
+      {
+        "check": "account_identity",
+        "ok": true,
+        "detail": "Stark Logistics matches across HubSpot, Stripe and AVA-7",
+        "evidence": [
+          {
+            "app": "hubspot",
+            "id": "58423221645"
+          },
+          {
+            "app": "stripe",
+            "id": "cus_VFnkc6nOAu4yyr"
+          },
+          {
+            "app": "linear",
+            "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4"
+          }
+        ]
+      }
+    ],
+    "creditMinor": 100000
+  },
+  "snapshot": {
+    "company": {
+      "id": "58423221645",
+      "name": "Stark Logistics",
+      "slaTier": "enterprise",
+      "renewalDate": "2026-12-01",
+      "annualValueMinor": 12000000,
+      "stripeCustomerId": "cus_VFnkc6nOAu4yyr"
+    },
+    "incident": {
+      "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+      "identifier": "AVA-7",
+      "title": "Webhook delivery delays",
+      "severity": "sev2",
+      "startedAt": "2026-09-10T09:00:00Z",
+      "resolvedAt": "2026-09-10T11:30:00Z",
+      "affectedCompanyIds": [
+        "58436208915",
+        "58430789728",
+        "58416226347",
+        "58423221645"
+      ]
+    },
+    "thread": [
+      {
+        "ts": "1789324114.383899",
+        "threadTs": "1789324114.383899",
+        "userId": "bot:B0C1MJ65DAQ",
+        "authorName": "Maya Chen (Stark)",
+        "text": "Thursday webhook delays again. Our dispatch team was flying blind."
+      },
+      {
+        "ts": "1789324114.538169",
+        "threadTs": "1789324114.383899",
+        "userId": "U0C1MHQB4KE",
+        "text": "Understood Maya, we will credit Stark $1,000 for Thursday."
+      }
+    ],
+    "credits": [],
+    "readAt": "2026-09-13T18:28:50.148Z"
+  },
+  "searches": [
+    {
+      "query": "Stark",
+      "matches": [
+        "Stark Logistics"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 10649,
+    "outputTokens": 1224,
+    "turns": 4,
+    "latencyMs": 29604
+  },
+  "approval": {
+    "userId": "U0C1MHQB4KE",
+    "at": "2026-09-13T18:28:51.319Z",
+    "snapshot": {
+      "company": {
+        "id": "58423221645",
+        "name": "Stark Logistics",
+        "slaTier": "enterprise",
+        "renewalDate": "2026-12-01",
+        "annualValueMinor": 12000000,
+        "stripeCustomerId": "cus_VFnkc6nOAu4yyr"
+      },
+      "incident": {
+        "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+        "identifier": "AVA-7",
+        "title": "Webhook delivery delays",
+        "severity": "sev2",
+        "startedAt": "2026-09-10T09:00:00Z",
+        "resolvedAt": "2026-09-10T11:30:00Z",
+        "affectedCompanyIds": [
+          "58436208915",
+          "58430789728",
+          "58416226347",
+          "58423221645"
+        ]
+      },
+      "thread": [
+        {
+          "ts": "1789324114.383899",
+          "threadTs": "1789324114.383899",
+          "userId": "bot:B0C1MJ65DAQ",
+          "authorName": "Maya Chen (Stark)",
+          "text": "Thursday webhook delays again. Our dispatch team was flying blind."
+        },
+        {
+          "ts": "1789324114.538169",
+          "threadTs": "1789324114.383899",
+          "userId": "U0C1MHQB4KE",
+          "text": "Understood Maya, we will credit Stark $1,000 for Thursday."
+        }
+      ],
+      "credits": [
+        {
+          "id": "cbtxn_1UFI9EQL5bFVYvXnTsU53amt",
+          "kind": "balance_transaction",
+          "amountMinor": 100000,
+          "createdAt": "2026-09-13T18:29:04.000Z",
+          "metadata": {}
+        }
+      ],
+      "readAt": "2026-09-13T18:28:51.318Z"
+    },
+    "verdict": {
+      "status": "BLOCK",
+      "reasons": [
+        "DUPLICATE_CREDIT",
+        "STALE_STATE"
+      ],
+      "checks": [
+        {
+          "check": "duplicate_credit",
+          "ok": false,
+          "reason": "DUPLICATE_CREDIT",
+          "detail": "Stark Logistics already received a $1,000 credit in Stripe at 18:29 UTC. Approving would pay them twice.",
+          "evidence": [
+            {
+              "app": "stripe",
+              "id": "cbtxn_1UFI9EQL5bFVYvXnTsU53amt"
+            }
+          ]
+        },
+        {
+          "check": "amount_vs_policy",
+          "ok": true,
+          "detail": "Promise matches policy: $1,000",
+          "evidence": [
+            {
+              "app": "slack",
+              "id": "1789324114.538169",
+              "quote": "we will credit Stark $1,000 for Thursday"
+            }
+          ]
+        },
+        {
+          "check": "promise_authority",
+          "ok": true,
+          "detail": "Promise written by an internal team member",
+          "evidence": [
+            {
+              "app": "slack",
+              "id": "1789324114.538169"
+            }
+          ]
+        },
+        {
+          "check": "account_identity",
+          "ok": true,
+          "detail": "Stark Logistics matches across HubSpot, Stripe and AVA-7",
+          "evidence": [
+            {
+              "app": "hubspot",
+              "id": "58423221645"
+            },
+            {
+              "app": "stripe",
+              "id": "cus_VFnkc6nOAu4yyr"
+            },
+            {
+              "app": "linear",
+              "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4"
+            }
+          ]
+        },
+        {
+          "check": "stale_state",
+          "ok": false,
+          "reason": "STALE_STATE",
+          "detail": "Since the card was posted, a $1,000 credit was added in Stripe at 18:29 UTC.",
+          "evidence": [
+            {
+              "app": "stripe",
+              "id": "cbtxn_1UFI9EQL5bFVYvXnTsU53amt"
+            }
+          ]
+        }
+      ],
+      "creditMinor": 100000
+    }
+  },
+  "outcome": {
+    "status": "blocked",
+    "objects": {},
+    "resumed": [],
+    "creditMinor": 100000,
+    "reasons": [
+      "DUPLICATE_CREDIT",
+      "STALE_STATE"
+    ],
+    "detail": "Stark Logistics already received a $1,000 credit in Stripe at 18:29 UTC. Approving would pay them twice. Since the card was posted, a $1,000 credit was added in Stripe at 18:29 UTC."
+  }
+}

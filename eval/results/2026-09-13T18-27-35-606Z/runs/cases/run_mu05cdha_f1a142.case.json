@@ -1,0 +1,274 @@
+{
+  "runId": "run_mu05cdha_f1a142",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789324071.345519"
+  },
+  "createdAt": "2026-09-13T18:28:10.201Z",
+  "proposal": {
+    "kind": "resolved",
+    "companyId": "58445344385",
+    "stripeCustomerId": "cus_VFnjKCWOV9yIkX",
+    "incidentId": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+    "promise": {
+      "amountMinor": 100000,
+      "currency": "usd",
+      "authorUserId": "U0C1MHQB4KE",
+      "messageTs": "1789324071.511989",
+      "quote": "a thousand bucks in credit"
+    },
+    "reasoning": "Acme Inc matches the incident AVA-6 (Checkout API outage) which lasted approximately 3 hours as described in the thread. The other Acme company is ruled out because it was affected by a webhook delivery issue, not a checkout outage. Acme Corp was affected only by AVA-7, which is not relevant to the checkout issue described.\"",
+    "evidence": [
+      {
+        "app": "slack",
+        "id": "1789324071.345519",
+        "quote": "the outage on Tuesday afternoon took our checkout down for about three hours"
+      },
+      {
+        "app": "slack",
+        "id": "1789324071.511989",
+        "quote": "a thousand bucks in credit"
+      },
+      {
+        "app": "linear",
+        "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+        "quote": "Checkout API outage"
+      },
+      {
+        "app": "hubspot",
+        "id": "58445344385",
+        "quote": "Acme Inc"
+      }
+    ]
+  },
+  "verdict": {
+    "status": "PASS",
+    "reasons": [],
+    "checks": [
+      {
+        "check": "duplicate_credit",
+        "ok": true,
+        "detail": "No credit issued yet for this incident",
+        "evidence": []
+      },
+      {
+        "check": "amount_vs_policy",
+        "ok": true,
+        "detail": "Promise matches policy: $1,000",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789324071.511989",
+            "quote": "a thousand bucks in credit"
+          }
+        ]
+      },
+      {
+        "check": "promise_authority",
+        "ok": true,
+        "detail": "Promise written by an internal team member",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789324071.511989"
+          }
+        ]
+      },
+      {
+        "check": "account_identity",
+        "ok": true,
+        "detail": "Acme Inc matches across HubSpot, Stripe and AVA-6",
+        "evidence": [
+          {
+            "app": "hubspot",
+            "id": "58445344385"
+          },
+          {
+            "app": "stripe",
+            "id": "cus_VFnjKCWOV9yIkX"
+          },
+          {
+            "app": "linear",
+            "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad"
+          }
+        ]
+      }
+    ],
+    "creditMinor": 100000
+  },
+  "snapshot": {
+    "company": {
+      "id": "58445344385",
+      "name": "Acme Inc",
+      "slaTier": "premium",
+      "renewalDate": "2026-10-24",
+      "annualValueMinor": 4800000,
+      "stripeCustomerId": "cus_VFnjKCWOV9yIkX"
+    },
+    "incident": {
+      "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+      "identifier": "AVA-6",
+      "title": "Checkout API outage",
+      "severity": "sev1",
+      "startedAt": "2026-09-08T14:00:00Z",
+      "resolvedAt": "2026-09-08T17:10:00Z",
+      "affectedCompanyIds": [
+        "58445344385",
+        "58426002498",
+        "58424616243",
+        "58413899317",
+        "58420738851"
+      ]
+    },
+    "thread": [
+      {
+        "ts": "1789324071.345519",
+        "threadTs": "1789324071.345519",
+        "userId": "bot:B0C1MJ65DAQ",
+        "authorName": "Dana Ruiz (Acme)",
+        "text": "Hi team, the outage on Tuesday afternoon took our checkout down for about three hours. That hurt."
+      },
+      {
+        "ts": "1789324071.511989",
+        "threadTs": "1789324071.345519",
+        "userId": "U0C1MHQB4KE",
+        "text": "Dana, I'm really sorry. We'll make it right with a thousand bucks in credit on your account."
+      }
+    ],
+    "credits": [],
+    "readAt": "2026-09-13T18:28:10.201Z"
+  },
+  "searches": [
+    {
+      "query": "Acme",
+      "matches": [
+        "Acme Corp",
+        "Acme Inc"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 10965,
+    "outputTokens": 1514,
+    "turns": 4,
+    "latencyMs": 32731
+  },
+  "approval": {
+    "userId": "U0C1MHQB4KE",
+    "at": "2026-09-13T18:28:11.181Z",
+    "snapshot": {
+      "company": {
+        "id": "58445344385",
+        "name": "Acme Inc",
+        "slaTier": "premium",
+        "renewalDate": "2026-10-24",
+        "annualValueMinor": 4800000,
+        "stripeCustomerId": "cus_VFnjKCWOV9yIkX"
+      },
+      "incident": {
+        "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+        "identifier": "AVA-6",
+        "title": "Checkout API outage",
+        "severity": "sev1",
+        "startedAt": "2026-09-08T14:00:00Z",
+        "resolvedAt": "2026-09-08T17:10:00Z",
+        "affectedCompanyIds": [
+          "58445344385",
+          "58426002498",
+          "58424616243",
+          "58413899317",
+          "58420738851"
+        ]
+      },
+      "thread": [
+        {
+          "ts": "1789324071.345519",
+          "threadTs": "1789324071.345519",
+          "userId": "bot:B0C1MJ65DAQ",
+          "authorName": "Dana Ruiz (Acme)",
+          "text": "Hi team, the outage on Tuesday afternoon took our checkout down for about three hours. That hurt."
+        },
+        {
+          "ts": "1789324071.511989",
+          "threadTs": "1789324071.345519",
+          "userId": "U0C1MHQB4KE",
+          "text": "Dana, I'm really sorry. We'll make it right with a thousand bucks in credit on your account."
+        }
+      ],
+      "credits": [],
+      "readAt": "2026-09-13T18:28:11.181Z"
+    },
+    "verdict": {
+      "status": "PASS",
+      "reasons": [],
+      "checks": [
+        {
+          "check": "duplicate_credit",
+          "ok": true,
+          "detail": "No credit issued yet for this incident",
+          "evidence": []
+        },
+        {
+          "check": "amount_vs_policy",
+          "ok": true,
+          "detail": "Promise matches policy: $1,000",
+          "evidence": [
+            {
+              "app": "slack",
+              "id": "1789324071.511989",
+              "quote": "a thousand bucks in credit"
+            }
+          ]
+        },
+        {
+          "check": "promise_authority",
+          "ok": true,
+          "detail": "Promise written by an internal team member",
+          "evidence": [
+            {
+              "app": "slack",
+              "id": "1789324071.511989"
+            }
+          ]
+        },
+        {
+          "check": "account_identity",
+          "ok": true,
+          "detail": "Acme Inc matches across HubSpot, Stripe and AVA-6",
+          "evidence": [
+            {
+              "app": "hubspot",
+              "id": "58445344385"
+            },
+            {
+              "app": "stripe",
+              "id": "cus_VFnjKCWOV9yIkX"
+            },
+            {
+              "app": "linear",
+              "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad"
+            }
+          ]
+        },
+        {
+          "check": "stale_state",
+          "ok": true,
+          "detail": "Nothing changed since the card was posted",
+          "evidence": []
+        }
+      ],
+      "creditMinor": 100000
+    }
+  },
+  "outcome": {
+    "status": "done",
+    "objects": {
+      "stripe_credit": "cbtxn_1UFI8aQL5bFVYvXnySkna3Zq",
+      "hubspot_note": "116847814670",
+      "slack_reply": "1789324105.820099"
+    },
+    "resumed": [],
+    "creditMinor": 100000,
+    "reasons": []
+  }
+}
