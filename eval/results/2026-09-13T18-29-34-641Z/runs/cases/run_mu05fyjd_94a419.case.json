@@ -1,0 +1,282 @@
+{
+  "runId": "run_mu05fyjd_94a419",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789324237.469989"
+  },
+  "createdAt": "2026-09-13T18:30:54.835Z",
+  "proposal": {
+    "kind": "resolved",
+    "companyId": "58430789728",
+    "stripeCustomerId": "cus_VFnmrJ2VXSozLc",
+    "incidentId": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+    "promise": {
+      "amountMinor": 50000,
+      "currency": "usd",
+      "authorUserId": "U0C1MHQB4KE",
+      "messageTs": "1789324238.062619",
+      "quote": "your plan gives you $500 for this incident, so that is what you will get"
+    },
+    "reasoning": "Globex Shipping experienced webhook delivery delays on 2026-09-10 as described in the thread, matching incident AVA-7. The latest message corrects the initial offer to the contract-specified $500 credit.",
+    "evidence": [
+      {
+        "app": "slack",
+        "id": "1789324237.469989",
+        "quote": "Our webhooks were 40 minutes late on Thursday morning and orders piled up"
+      },
+      {
+        "app": "slack",
+        "id": "1789324238.062619",
+        "quote": "your plan gives you $500 for this incident, so that is what you will get"
+      },
+      {
+        "app": "hubspot",
+        "id": "58430789728"
+      },
+      {
+        "app": "linear",
+        "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+        "quote": "Webhook delivery delays"
+      }
+    ]
+  },
+  "verdict": {
+    "status": "PASS",
+    "reasons": [],
+    "checks": [
+      {
+        "check": "duplicate_credit",
+        "ok": true,
+        "detail": "No credit issued yet for this incident",
+        "evidence": []
+      },
+      {
+        "check": "amount_vs_policy",
+        "ok": true,
+        "detail": "Promise matches policy: $500",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789324238.062619",
+            "quote": "your plan gives you $500 for this incident, so that is what you will get"
+          }
+        ]
+      },
+      {
+        "check": "promise_authority",
+        "ok": true,
+        "detail": "Promise written by an internal team member",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789324238.062619"
+          }
+        ]
+      },
+      {
+        "check": "account_identity",
+        "ok": true,
+        "detail": "Globex Shipping matches across HubSpot, Stripe and AVA-7",
+        "evidence": [
+          {
+            "app": "hubspot",
+            "id": "58430789728"
+          },
+          {
+            "app": "stripe",
+            "id": "cus_VFnmrJ2VXSozLc"
+          },
+          {
+            "app": "linear",
+            "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4"
+          }
+        ]
+      }
+    ],
+    "creditMinor": 50000
+  },
+  "snapshot": {
+    "company": {
+      "id": "58430789728",
+      "name": "Globex Shipping",
+      "slaTier": "premium",
+      "renewalDate": "2026-11-30",
+      "annualValueMinor": 3600000,
+      "stripeCustomerId": "cus_VFnmrJ2VXSozLc"
+    },
+    "incident": {
+      "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+      "identifier": "AVA-7",
+      "title": "Webhook delivery delays",
+      "severity": "sev2",
+      "startedAt": "2026-09-10T09:00:00Z",
+      "resolvedAt": "2026-09-10T11:30:00Z",
+      "affectedCompanyIds": [
+        "58436208915",
+        "58430789728",
+        "58416226347",
+        "58423221645"
+      ]
+    },
+    "thread": [
+      {
+        "ts": "1789324237.469989",
+        "threadTs": "1789324237.469989",
+        "userId": "bot:B0C1MJ65DAQ",
+        "authorName": "Priya Shah (Globex)",
+        "text": "Our webhooks were 40 minutes late on Thursday morning and orders piled up."
+      },
+      {
+        "ts": "1789324237.764239",
+        "threadTs": "1789324237.469989",
+        "userId": "U0C1MHQB4KE",
+        "text": "Sorry Priya. I can offer $250 in credit for that."
+      },
+      {
+        "ts": "1789324238.062619",
+        "threadTs": "1789324237.469989",
+        "userId": "U0C1MHQB4KE",
+        "text": "Correction after checking your contract: your plan gives you $500 for this incident, so that is what you will get."
+      }
+    ],
+    "credits": [],
+    "readAt": "2026-09-13T18:30:54.835Z"
+  },
+  "searches": [
+    {
+      "query": "Globex",
+      "matches": [
+        "Globex Shipping"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 13410,
+    "outputTokens": 1120,
+    "turns": 5,
+    "latencyMs": 30699
+  },
+  "approval": {
+    "userId": "U0C1MHQB4KE",
+    "at": "2026-09-13T18:30:55.768Z",
+    "snapshot": {
+      "company": {
+        "id": "58430789728",
+        "name": "Globex Shipping",
+        "slaTier": "premium",
+        "renewalDate": "2026-11-30",
+        "annualValueMinor": 3600000,
+        "stripeCustomerId": "cus_VFnmrJ2VXSozLc"
+      },
+      "incident": {
+        "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+        "identifier": "AVA-7",
+        "title": "Webhook delivery delays",
+        "severity": "sev2",
+        "startedAt": "2026-09-10T09:00:00Z",
+        "resolvedAt": "2026-09-10T11:30:00Z",
+        "affectedCompanyIds": [
+          "58436208915",
+          "58430789728",
+          "58416226347",
+          "58423221645"
+        ]
+      },
+      "thread": [
+        {
+          "ts": "1789324237.469989",
+          "threadTs": "1789324237.469989",
+          "userId": "bot:B0C1MJ65DAQ",
+          "authorName": "Priya Shah (Globex)",
+          "text": "Our webhooks were 40 minutes late on Thursday morning and orders piled up."
+        },
+        {
+          "ts": "1789324237.764239",
+          "threadTs": "1789324237.469989",
+          "userId": "U0C1MHQB4KE",
+          "text": "Sorry Priya. I can offer $250 in credit for that."
+        },
+        {
+          "ts": "1789324238.062619",
+          "threadTs": "1789324237.469989",
+          "userId": "U0C1MHQB4KE",
+          "text": "Correction after checking your contract: your plan gives you $500 for this incident, so that is what you will get."
+        }
+      ],
+      "credits": [],
+      "readAt": "2026-09-13T18:30:55.767Z"
+    },
+    "verdict": {
+      "status": "PASS",
+      "reasons": [],
+      "checks": [
+        {
+          "check": "duplicate_credit",
+          "ok": true,
+          "detail": "No credit issued yet for this incident",
+          "evidence": []
+        },
+        {
+          "check": "amount_vs_policy",
+          "ok": true,
+          "detail": "Promise matches policy: $500",
+          "evidence": [
+            {
+              "app": "slack",
+              "id": "1789324238.062619",
+              "quote": "your plan gives you $500 for this incident, so that is what you will get"
+            }
+          ]
+        },
+        {
+          "check": "promise_authority",
+          "ok": true,
+          "detail": "Promise written by an internal team member",
+          "evidence": [
+            {
+              "app": "slack",
+              "id": "1789324238.062619"
+            }
+          ]
+        },
+        {
+          "check": "account_identity",
+          "ok": true,
+          "detail": "Globex Shipping matches across HubSpot, Stripe and AVA-7",
+          "evidence": [
+            {
+              "app": "hubspot",
+              "id": "58430789728"
+            },
+            {
+              "app": "stripe",
+              "id": "cus_VFnmrJ2VXSozLc"
+            },
+            {
+              "app": "linear",
+              "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4"
+            }
+          ]
+        },
+        {
+          "check": "stale_state",
+          "ok": true,
+          "detail": "Nothing changed since the card was posted",
+          "evidence": []
+        }
+      ],
+      "creditMinor": 50000
+    }
+  },
+  "outcome": {
+    "status": "done",
+    "objects": {
+      "stripe_credit": "cbtxn_1UFIBFQL5bFVYvXn5NNPHNlw",
+      "hubspot_note": "116843521677",
+      "slack_reply": "1789324270.291159"
+    },
+    "resumed": [],
+    "creditMinor": 50000,
+    "reasons": []
+  }
+}
