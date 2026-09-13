@@ -1,0 +1,173 @@
+{
+  "runId": "run_mu07okuv_1b4b5c",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789327999.492799"
+  },
+  "createdAt": "2026-09-13T19:33:32.277Z",
+  "proposal": {
+    "kind": "resolved",
+    "companyId": "58426002498",
+    "stripeCustomerId": "cus_VFomdlHRsAxvIB",
+    "incidentId": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+    "promise": {
+      "amountMinor": 100000,
+      "currency": "usd",
+      "authorUserId": "U0C1MHQB4KE",
+      "messageTs": "1789327999.769169",
+      "quote": "We will credit you $1,000 for Tuesday."
+    },
+    "reasoning": "Umbrella Health is the only company matching \"Umbrella\" in the thread, and the Checkout API outage incident AVA-6 affected this company. The promise is the $1,000 credit stated in the latest message.",
+    "evidence": [
+      {
+        "app": "slack",
+        "id": "1789327999.492799",
+        "quote": "The checkout outage on Tuesday cost us a lot of orders."
+      },
+      {
+        "app": "slack",
+        "id": "1789327999.769169",
+        "quote": "We will credit you $1,000 for Tuesday."
+      },
+      {
+        "app": "hubspot",
+        "id": "58426002498",
+        "quote": "Umbrella Health"
+      },
+      {
+        "app": "linear",
+        "id": "AVA-6",
+        "quote": "Checkout API outage"
+      }
+    ]
+  },
+  "verdict": {
+    "status": "BLOCK",
+    "reasons": [
+      "DUPLICATE_CREDIT"
+    ],
+    "checks": [
+      {
+        "check": "duplicate_credit",
+        "ok": false,
+        "reason": "DUPLICATE_CREDIT",
+        "detail": "Umbrella Health already received a $1,000 credit in Stripe at 19:33 UTC. Approving would credit them twice.",
+        "evidence": [
+          {
+            "app": "stripe",
+            "id": "cbtxn_1UFJ9QQL5bFVYvXnRmFo0U6Y"
+          }
+        ]
+      },
+      {
+        "check": "amount_vs_policy",
+        "ok": true,
+        "detail": "Promise matches policy: $1,000",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789327999.769169",
+            "quote": "We will credit you $1,000 for Tuesday."
+          }
+        ]
+      },
+      {
+        "check": "promise_authority",
+        "ok": true,
+        "detail": "Promise written by an internal team member",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789327999.769169"
+          }
+        ]
+      },
+      {
+        "check": "account_identity",
+        "ok": true,
+        "detail": "Umbrella Health matches across HubSpot, Stripe and AVA-6",
+        "evidence": [
+          {
+            "app": "hubspot",
+            "id": "58426002498"
+          },
+          {
+            "app": "stripe",
+            "id": "cus_VFomdlHRsAxvIB"
+          },
+          {
+            "app": "linear",
+            "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad"
+          }
+        ]
+      }
+    ],
+    "creditMinor": 100000
+  },
+  "snapshot": {
+    "company": {
+      "id": "58426002498",
+      "name": "Umbrella Health",
+      "slaTier": "premium",
+      "renewalDate": "2026-10-05",
+      "annualValueMinor": 6000000,
+      "stripeCustomerId": "cus_VFomdlHRsAxvIB"
+    },
+    "incident": {
+      "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+      "identifier": "AVA-6",
+      "title": "Checkout API outage",
+      "severity": "sev1",
+      "startedAt": "2026-09-08T14:00:00Z",
+      "resolvedAt": "2026-09-08T17:10:00Z",
+      "affectedCompanyIds": [
+        "58445344385",
+        "58426002498",
+        "58424616243",
+        "58413899317",
+        "58420738851",
+        "58430945350",
+        "58433412938"
+      ]
+    },
+    "thread": [
+      {
+        "ts": "1789327999.492799",
+        "threadTs": "1789327999.492799",
+        "userId": "bot:B0C1MJ65DAQ",
+        "authorName": "Lena Okafor (Umbrella)",
+        "text": "The checkout outage on Tuesday cost us a lot of orders. Is there any compensation?"
+      },
+      {
+        "ts": "1789327999.769169",
+        "threadTs": "1789327999.492799",
+        "userId": "U0C1MHQB4KE",
+        "text": "Absolutely, Lena. We will credit you $1,000 for Tuesday."
+      }
+    ],
+    "credits": [
+      {
+        "id": "cbtxn_1UFJ9QQL5bFVYvXnRmFo0U6Y",
+        "kind": "balance_transaction",
+        "amountMinor": 100000,
+        "createdAt": "2026-09-13T19:33:20.000Z",
+        "metadata": {}
+      }
+    ],
+    "readAt": "2026-09-13T19:33:32.261Z"
+  },
+  "searches": [
+    {
+      "query": "Umbrella",
+      "matches": [
+        "Umbrella Health"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 9635,
+    "outputTokens": 969,
+    "turns": 4,
+    "latencyMs": 26290
+  }
+}

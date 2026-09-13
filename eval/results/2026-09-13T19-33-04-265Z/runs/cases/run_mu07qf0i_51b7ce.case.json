@@ -1,0 +1,284 @@
+{
+  "runId": "run_mu07qf0i_51b7ce",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789328084.528359"
+  },
+  "createdAt": "2026-09-13T19:35:00.565Z",
+  "proposal": {
+    "kind": "resolved",
+    "companyId": "58430789728",
+    "stripeCustomerId": "cus_VFooyzHSXa9t9D",
+    "incidentId": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+    "promise": {
+      "amountMinor": 50000,
+      "currency": "usd",
+      "authorUserId": "U0C1MHQB4KE",
+      "messageTs": "1789328084.896989",
+      "quote": "your plan gives you $500 for this incident, so that is what you will get"
+    },
+    "reasoning": "Globex Shipping was affected by AVA-7 (Webhook delivery delays on September 10, 2026), which matches Priya's report of webhooks being 40 minutes late on Thursday morning. The latest message corrects the credit promise to $500 based on their contract terms.",
+    "evidence": [
+      {
+        "app": "slack",
+        "id": "1789328084.528359",
+        "quote": "Our webhooks were 40 minutes late on Thursday morning and orders piled up"
+      },
+      {
+        "app": "slack",
+        "id": "1789328084.896989",
+        "quote": "your plan gives you $500 for this incident, so that is what you will get"
+      },
+      {
+        "app": "hubspot",
+        "id": "58430789728"
+      },
+      {
+        "app": "linear",
+        "id": "AVA-7",
+        "quote": "Webhook delivery delays"
+      }
+    ]
+  },
+  "verdict": {
+    "status": "PASS",
+    "reasons": [],
+    "checks": [
+      {
+        "check": "duplicate_credit",
+        "ok": true,
+        "detail": "No credit issued yet for this incident",
+        "evidence": []
+      },
+      {
+        "check": "amount_vs_policy",
+        "ok": true,
+        "detail": "Promise matches policy: $500",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789328084.896989",
+            "quote": "your plan gives you $500 for this incident, so that is what you will get"
+          }
+        ]
+      },
+      {
+        "check": "promise_authority",
+        "ok": true,
+        "detail": "Promise written by an internal team member",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789328084.896989"
+          }
+        ]
+      },
+      {
+        "check": "account_identity",
+        "ok": true,
+        "detail": "Globex Shipping matches across HubSpot, Stripe and AVA-7",
+        "evidence": [
+          {
+            "app": "hubspot",
+            "id": "58430789728"
+          },
+          {
+            "app": "stripe",
+            "id": "cus_VFooyzHSXa9t9D"
+          },
+          {
+            "app": "linear",
+            "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4"
+          }
+        ]
+      }
+    ],
+    "creditMinor": 50000
+  },
+  "snapshot": {
+    "company": {
+      "id": "58430789728",
+      "name": "Globex Shipping",
+      "slaTier": "premium",
+      "renewalDate": "2026-11-30",
+      "annualValueMinor": 3600000,
+      "stripeCustomerId": "cus_VFooyzHSXa9t9D"
+    },
+    "incident": {
+      "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+      "identifier": "AVA-7",
+      "title": "Webhook delivery delays",
+      "severity": "sev2",
+      "startedAt": "2026-09-10T09:00:00Z",
+      "resolvedAt": "2026-09-10T11:30:00Z",
+      "affectedCompanyIds": [
+        "58436208915",
+        "58430789728",
+        "58416226347",
+        "58423221645",
+        "58430635134"
+      ]
+    },
+    "thread": [
+      {
+        "ts": "1789328084.528359",
+        "threadTs": "1789328084.528359",
+        "userId": "bot:B0C1MJ65DAQ",
+        "authorName": "Priya Shah (Globex)",
+        "text": "Our webhooks were 40 minutes late on Thursday morning and orders piled up."
+      },
+      {
+        "ts": "1789328084.695889",
+        "threadTs": "1789328084.528359",
+        "userId": "U0C1MHQB4KE",
+        "text": "Sorry Priya. I can offer $250 in credit for that."
+      },
+      {
+        "ts": "1789328084.896989",
+        "threadTs": "1789328084.528359",
+        "userId": "U0C1MHQB4KE",
+        "text": "Correction after checking your contract: your plan gives you $500 for this incident, so that is what you will get."
+      }
+    ],
+    "credits": [],
+    "readAt": "2026-09-13T19:35:00.565Z"
+  },
+  "searches": [
+    {
+      "query": "Globex",
+      "matches": [
+        "Globex Shipping"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 13187,
+    "outputTokens": 1029,
+    "turns": 5,
+    "latencyMs": 29736
+  },
+  "approval": {
+    "userId": "U0C1MHQB4KE",
+    "at": "2026-09-13T19:35:01.497Z",
+    "snapshot": {
+      "company": {
+        "id": "58430789728",
+        "name": "Globex Shipping",
+        "slaTier": "premium",
+        "renewalDate": "2026-11-30",
+        "annualValueMinor": 3600000,
+        "stripeCustomerId": "cus_VFooyzHSXa9t9D"
+      },
+      "incident": {
+        "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4",
+        "identifier": "AVA-7",
+        "title": "Webhook delivery delays",
+        "severity": "sev2",
+        "startedAt": "2026-09-10T09:00:00Z",
+        "resolvedAt": "2026-09-10T11:30:00Z",
+        "affectedCompanyIds": [
+          "58436208915",
+          "58430789728",
+          "58416226347",
+          "58423221645",
+          "58430635134"
+        ]
+      },
+      "thread": [
+        {
+          "ts": "1789328084.528359",
+          "threadTs": "1789328084.528359",
+          "userId": "bot:B0C1MJ65DAQ",
+          "authorName": "Priya Shah (Globex)",
+          "text": "Our webhooks were 40 minutes late on Thursday morning and orders piled up."
+        },
+        {
+          "ts": "1789328084.695889",
+          "threadTs": "1789328084.528359",
+          "userId": "U0C1MHQB4KE",
+          "text": "Sorry Priya. I can offer $250 in credit for that."
+        },
+        {
+          "ts": "1789328084.896989",
+          "threadTs": "1789328084.528359",
+          "userId": "U0C1MHQB4KE",
+          "text": "Correction after checking your contract: your plan gives you $500 for this incident, so that is what you will get."
+        }
+      ],
+      "credits": [],
+      "readAt": "2026-09-13T19:35:01.497Z"
+    },
+    "verdict": {
+      "status": "PASS",
+      "reasons": [],
+      "checks": [
+        {
+          "check": "duplicate_credit",
+          "ok": true,
+          "detail": "No credit issued yet for this incident",
+          "evidence": []
+        },
+        {
+          "check": "amount_vs_policy",
+          "ok": true,
+          "detail": "Promise matches policy: $500",
+          "evidence": [
+            {
+              "app": "slack",
+              "id": "1789328084.896989",
+              "quote": "your plan gives you $500 for this incident, so that is what you will get"
+            }
+          ]
+        },
+        {
+          "check": "promise_authority",
+          "ok": true,
+          "detail": "Promise written by an internal team member",
+          "evidence": [
+            {
+              "app": "slack",
+              "id": "1789328084.896989"
+            }
+          ]
+        },
+        {
+          "check": "account_identity",
+          "ok": true,
+          "detail": "Globex Shipping matches across HubSpot, Stripe and AVA-7",
+          "evidence": [
+            {
+              "app": "hubspot",
+              "id": "58430789728"
+            },
+            {
+              "app": "stripe",
+              "id": "cus_VFooyzHSXa9t9D"
+            },
+            {
+              "app": "linear",
+              "id": "e4eaf88b-f982-4d74-878c-ec06f21182c4"
+            }
+          ]
+        },
+        {
+          "check": "stale_state",
+          "ok": true,
+          "detail": "Nothing changed since the card was posted",
+          "evidence": []
+        }
+      ],
+      "creditMinor": 50000
+    }
+  },
+  "outcome": {
+    "status": "done",
+    "objects": {
+      "stripe_credit": "cbtxn_1UFJBHQL5bFVYvXnhjasYCAE",
+      "hubspot_note": "116831721612",
+      "slack_reply": "1789328116.173189"
+    },
+    "resumed": [],
+    "creditMinor": 50000,
+    "reasons": []
+  }
+}

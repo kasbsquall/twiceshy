@@ -16,8 +16,10 @@ TwiceShy is one orchestrator agent that settles the credit:
 2. **Code checks what Claude submits.** Every ID must exist in its app, HubSpot must link the company to that Stripe customer, the incident must list the company as affected, and the quoted promise must appear verbatim in the stated message by the stated author.
 3. **Policy decides the money.** SLA tier from HubSpot times severity from Linear gives the credit. Role caps apply to promises.
 4. **A guard returns PASS, HOLD or BLOCK** with reasons written for a CS manager: four checks before the card is posted, and a fifth on Approve.
-5. **A human approves in Slack.** On Approve, TwiceShy re-reads Stripe, HubSpot and Linear and stops if anything changed since the card was posted.
+5. **A human approves in Slack.** Only listed approvers can press Approve, and never the person who made the promise. On Approve, TwiceShy re-reads Stripe, HubSpot and Linear and stops if anything changed since the card was posted.
 6. **A crash-safe runner executes** the Stripe credit, the HubSpot note and the Slack reply once each, across process restarts.
+
+A CS lead runs it on a thread once the customer asks for compensation (`npm run resolve`). A PASS card waits for one click. A HOLD card says why and who should confirm; after the thread is corrected, running TwiceShy on it again posts a new card. A BLOCK card says what already happened in Stripe, so nobody pays twice.
 
 ### Architecture
 
@@ -58,7 +60,7 @@ The card never shows model prose. Every line on it is built from records read ba
 | Account identity | `ACCOUNT_IDENTITY_MISMATCH` | BLOCK | HubSpot, Stripe and Linear do not point at the same account by ID |
 | Stale state, on Approve | `STALE_STATE` | BLOCK | Anything changed since the card was posted |
 
-Two more outcomes sit outside the checks. Any read that fails or times out gives `VERIFICATION_UNAVAILABLE` and a BLOCK: TwiceShy fails closed. A proposal Claude could not settle, or one whose claims do not match the records, gives `AMBIGUOUS` or `PROPOSAL_UNVERIFIED` and a HOLD.
+Two more outcomes sit outside the checks. Any read that fails gives `VERIFICATION_UNAVAILABLE` and a BLOCK: TwiceShy fails closed. A proposal Claude could not settle, or one whose claims do not match the records, gives `AMBIGUOUS` or `PROPOSAL_UNVERIFIED` and a HOLD.
 
 ### Durable runner
 
@@ -92,6 +94,7 @@ cp .env.example .env      # fill in the keys; the Slack app manifest is slack-ap
 npm run seed              # HubSpot properties and companies, Linear incidents
 npm run demo -- --scenario s1-lookalike   # posts the thread, Claude resolves it, card appears in Slack
 npm run approvals         # listens for Approve; add -- --crash-after lost-response:stripe_credit to kill it mid-run
+npm run resolve -- --channel C0123ABC --ts 1789327602.757069   # run it on a real thread already in Slack
 npm run replay -- <run_id>
 npm run eval              # 11 scenarios x k=3, TwiceShy and baseline, all live
 ```
@@ -100,7 +103,7 @@ Linear incidents are read from issues labeled `incident`. Their time window and 
 
 ## How we tested reliability
 
-All numbers in this section come from one live run of `npm run eval`: 11 scenarios, k=3, 66 runs (33 TwiceShy, 33 baseline), model claude-haiku-4-5, against real Slack, HubSpot, Linear and Stripe test mode. Safety numbers are read back from the apps after each run, not taken from what the runner reports. Full table: [`eval/results/2026-09-13T18-48-57-055Z/results.md`](eval/results/2026-09-13T18-48-57-055Z/results.md). Per-run JSON with every Stripe, HubSpot and Slack object ID: [`runs.json`](eval/results/2026-09-13T18-48-57-055Z/runs.json). Every ledger and case file is committed next to it.
+All numbers in this section come from one live run of `npm run eval` at commit 3f333da, the code in this repo: 11 scenarios, k=3, 66 runs (33 TwiceShy, 33 baseline), model claude-haiku-4-5, against real Slack, HubSpot, Linear and Stripe test mode. Safety numbers are read back from the apps after each run, not taken from what the runner reports. Full table: [`eval/results/2026-09-13T19-33-04-265Z/results.md`](eval/results/2026-09-13T19-33-04-265Z/results.md). Per-run JSON with every Stripe, HubSpot and Slack object ID: [`runs.json`](eval/results/2026-09-13T19-33-04-265Z/runs.json). Every ledger and case file is committed next to it.
 
 ### Baselines
 
@@ -126,17 +129,17 @@ Where the baseline's money went wrong: in s4 and s6 it credited a customer a tea
 | Resolution | TwiceShy | Baseline |
 |---|---|---|
 | Correct account | 30 of 30 | 27 of 33 |
-| Correct incident | 29 of 30 | 27 of 33 |
+| Correct incident | 30 of 30 | 27 of 33 |
 | Correct promised amount | 18 of 18 | 18 of 18 |
 | Ambiguous thread flagged instead of guessed | 3 of 3 | 0 of 3 |
 
 TwiceShy's account and incident rows leave out s8, where flagging the thread as ambiguous is the right answer. The baseline cannot flag, so its s8 runs count as misses; without s8 it gets 27 of 30 on both.
 
-TwiceShy returned the expected verdict in 32 of 33 runs, wrongly blocked 1 of 15 runs that should have been paid, and finished 3 of 3 crash runs with one object per app.
+TwiceShy returned the expected verdict in 33 of 33 runs, wrongly blocked 0 of 15 runs that should have been paid, and finished 3 of 3 crash runs with one object per app.
 
 | Scenario | Expected | TwiceShy, correct verdict | Baseline, safe payment |
 |---|---|---|---|
-| s1 look-alike company, incident by time, amount in words | PASS | 2 of 3 | 0 of 3 |
+| s1 look-alike company, incident by time, amount in words | PASS | 3 of 3 | 0 of 3 |
 | s2 promise corrected later in the thread | PASS | 3 of 3 | 3 of 3 |
 | s3 customer quotes a promise nobody made | HOLD PROMISE_NOT_AUTHORIZED | 3 of 3 | cannot hold |
 | s4 teammate already credited by hand | BLOCK DUPLICATE_CREDIT | 3 of 3 | cannot block |
@@ -148,7 +151,7 @@ TwiceShy returned the expected verdict in 32 of 33 runs, wrongly blocked 1 of 15
 | s10 a sales rep promises money, the CSM takes over without confirming | HOLD PROMISE_NOT_AUTHORIZED | 3 of 3 | cannot hold |
 | s11 customer claims a higher plan and mentions an incident that did not affect them | PASS | 3 of 3 | 3 of 3 |
 
-Cost: median 12,751 input and 1,182 output tokens per TwiceShy run, about 2 cents per case at Haiku 4.5 list prices. Median 34.6 s per run, which includes the harness creating a fresh Stripe customer and posting the thread.
+Cost: median 12,983 input and 1,123 output tokens per TwiceShy run, about 2 cents per case at Haiku 4.5 list prices ($1 and $5 per million tokens). Median 35.1 s per run, which includes the harness creating a fresh Stripe customer and posting the thread.
 
 ### Crash recovery
 
@@ -160,8 +163,10 @@ In CI, test/crash.process.test.ts starts the runner as a child process that exit
 
 ### Failure catalog
 
+No TwiceShy misses in this run. An earlier full run at commit 10c4574 ([`eval/results/2026-09-13T18-48-57-055Z`](eval/results/2026-09-13T18-48-57-055Z/results.md)) had one, and it changed the code:
+
 - **s1, second repeat (`r1` in runs.json), `run_mu064sdf_837abb`: expected PASS, got BLOCK.** Claude's own reasoning named the right incident ("Checkout API outage (AVA-6)"), but the incident ID it submitted was AVA-7, the webhook incident. The verifier trusts IDs, not prose, so the guard read AVA-7 from Linear, saw it does not list Acme Inc and that its policy amount is $500, and blocked with `ACCOUNT_IDENTITY_MISMATCH` and `AMOUNT_VS_POLICY`. No money moved and a person would see why on the card. It is a false block. Replay it with `npm run replay -- run_mu064sdf_837abb`.
-- The same mistake happened once more in a live demo run. **Fix, built after the 66-run eval:** Claude now submits the readable identifier (AVA-6) and code maps it to the Linear ID; an identifier that does not exist goes back to the model as an invalid submission (src/agent/resolve.ts, test/agent.test.ts). A live re-run of s1, s2 and s8 at k=3 with the fix returned the expected verdict in 9 of 9 runs ([`eval/results/2026-09-13T19-28-18-677Z`](eval/results/2026-09-13T19-28-18-677Z/results.md)). The 66-run numbers above are from before the fix and are left as they were.
+- The same mistake happened once more in a live demo run. **Fix:** Claude now submits the readable identifier (AVA-6) and code maps it to the Linear ID; an identifier that does not exist goes back to the model as an invalid submission (src/agent/resolve.ts, test/agent.test.ts). A live re-run of s1, s2 and s8 at k=3 with the fix returned the expected verdict in 9 of 9 runs ([`eval/results/2026-09-13T19-28-18-677Z`](eval/results/2026-09-13T19-28-18-677Z/results.md)), and the full run above includes it. The earlier run's other numbers match this one, except correct incident (29 of 30) and false blocks (1 of 15).
 
 The baseline's misses are all in `results.md`.
 
@@ -176,8 +181,10 @@ When a teammate credits Acme by hand in the Stripe dashboard after the card is p
 ### Limitations
 
 - The eval threads were written by us: s1 to s8 by the author, s9 to s11 by Claude (the coding agent) with fictional personas on both sides of the thread. HubSpot, Linear, Stripe and Slack are live and the final state is read back from those apps, but nobody outside the project wrote the language of the threads.
-- Each guard check has a scenario built for it, so the eval shows the checks fire on the cases they were designed for. It does not measure how often real threads hit them.
-- Customer and sales-teammate messages are posted by the Slack app under a display name, inside our workspace, to stand in for a Slack Connect channel. CSM messages are posted by a real user account, which is what the promise-authority check relies on. In the eval, that same account is the approver.
+- Each guard check has a scenario built for it, so the eval shows the checks fire on the cases they were designed for. It does not measure how often real threads hit them. The scenarios that test Claude's reading are s1, s2, s3, s8, s9, s10 and s11; s4, s6 and s7 mostly test code that does not depend on the model.
+- The guard can only hold a promise Claude reports. If Claude left a promise out of its proposal, the case would pass at the policy amount. The amount is still the policy amount, never the promised one.
+- The eval calls the approval function directly instead of pressing the button in Slack (`postCards: false`). The Slack card and Socket Mode path are exercised in the live demo and the video, not in the eval numbers. Edits to the thread after the card was posted are not part of the stale-state check.
+- Customer and sales-teammate messages are posted by the Slack app under a display name, inside our workspace, to stand in for a Slack Connect channel. CSM messages are posted by a real user account, which is what the promise-authority check relies on. The workspace has one real person, so the eval and the demo set `ALLOW_SELF_APPROVAL=true` and that account is also the approver. The default blocks it.
 - 11 scenarios and k=3 is a small sample. The numbers show behavior on these cases, not a rate you should expect in production.
 - The verifier checks IDs and the promise quote. The evidence quotes Claude attaches for HubSpot and Linear are shown to no one and not checked. When one company was hit by two incidents, which one the thread means is Claude's call, checked only by the human on the card.
 - Any Stripe credit without TwiceShy metadata created after the incident started counts as a manual credit for it. A goodwill credit for something unrelated would block the case, and a person has to look.

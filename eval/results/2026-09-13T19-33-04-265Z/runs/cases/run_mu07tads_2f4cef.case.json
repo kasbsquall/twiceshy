@@ -1,0 +1,49 @@
+{
+  "runId": "run_mu07tads_2f4cef",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789328219.279849"
+  },
+  "createdAt": "2026-09-13T19:37:18.796Z",
+  "proposal": {
+    "kind": "ambiguous",
+    "candidates": [
+      {
+        "companyId": "58413899317",
+        "incidentId": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+        "why": "Vandelay Imports was affected by the Checkout API outage (AVA-6) on September 8, 2026"
+      },
+      {
+        "companyId": "58420738851",
+        "incidentId": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+        "why": "Vandelay Industries was affected by the Checkout API outage (AVA-6) on September 8, 2026"
+      }
+    ],
+    "question": "Is \"Vandelay\" referring to Vandelay Imports or Vandelay Industries, and does \"The Tuesday outage\" refer to the Monday, September 8 Checkout API outage (AVA-6)?"
+  },
+  "verificationDetail": "Is \"Vandelay\" referring to Vandelay Imports or Vandelay Industries, and does \"The Tuesday outage\" refer to the Monday, September 8 Checkout API outage (AVA-6)?",
+  "verdict": {
+    "status": "HOLD",
+    "reasons": [
+      "AMBIGUOUS"
+    ],
+    "checks": [],
+    "creditMinor": null
+  },
+  "snapshot": null,
+  "searches": [
+    {
+      "query": "Vandelay",
+      "matches": [
+        "Vandelay Imports",
+        "Vandelay Industries"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 9672,
+    "outputTokens": 1537,
+    "turns": 4,
+    "latencyMs": 33244
+  }
+}

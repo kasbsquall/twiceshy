@@ -1,0 +1,172 @@
+{
+  "runId": "run_mu07tt4r_eb9841",
+  "thread": {
+    "channelId": "C0C1D9X5B2R",
+    "threadTs": "1789328242.836509"
+  },
+  "createdAt": "2026-09-13T19:37:42.703Z",
+  "proposal": {
+    "kind": "resolved",
+    "companyId": "58430945350",
+    "stripeCustomerId": "cus_VForL4hKmzZytA",
+    "incidentId": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+    "promise": {
+      "amountMinor": 250000,
+      "currency": "usd",
+      "authorUserId": "U0C1MHQB4KE",
+      "messageTs": "1789328243.155849",
+      "quote": "we are crediting $2,500"
+    },
+    "reasoning": "Northwind Analytics is the affected company in AVA-6 (Checkout API outage on 2026-09-08 from 14:00-17:10 UTC), which matches the thread's description of a Tuesday afternoon checkout API outage. The team promised $2,500 in the latest message.\"",
+    "evidence": [
+      {
+        "app": "slack",
+        "id": "1789328242.836509",
+        "quote": "Tuesday afternoon your checkout API was down for three hours"
+      },
+      {
+        "app": "slack",
+        "id": "1789328242.982729",
+        "quote": "we logged 5xx from 14:02 to 17:08 UTC"
+      },
+      {
+        "app": "slack",
+        "id": "1789328243.155849",
+        "quote": "we are crediting $2,500"
+      },
+      {
+        "app": "hubspot",
+        "id": "58430945350",
+        "quote": "Northwind Analytics"
+      },
+      {
+        "app": "linear",
+        "id": "AVA-6",
+        "quote": "Checkout API outage"
+      }
+    ]
+  },
+  "verdict": {
+    "status": "HOLD",
+    "reasons": [
+      "AMOUNT_ABOVE_ROLE_CAP"
+    ],
+    "checks": [
+      {
+        "check": "duplicate_credit",
+        "ok": true,
+        "detail": "No credit issued yet for this incident",
+        "evidence": []
+      },
+      {
+        "check": "amount_vs_policy",
+        "ok": false,
+        "reason": "AMOUNT_ABOVE_ROLE_CAP",
+        "detail": "The CSM promised $2,500. CSMs can offer up to $1,000.",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789328243.155849",
+            "quote": "we are crediting $2,500"
+          }
+        ]
+      },
+      {
+        "check": "promise_authority",
+        "ok": true,
+        "detail": "Promise written by an internal team member",
+        "evidence": [
+          {
+            "app": "slack",
+            "id": "1789328243.155849"
+          }
+        ]
+      },
+      {
+        "check": "account_identity",
+        "ok": true,
+        "detail": "Northwind Analytics matches across HubSpot, Stripe and AVA-6",
+        "evidence": [
+          {
+            "app": "hubspot",
+            "id": "58430945350"
+          },
+          {
+            "app": "stripe",
+            "id": "cus_VForL4hKmzZytA"
+          },
+          {
+            "app": "linear",
+            "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad"
+          }
+        ]
+      }
+    ],
+    "creditMinor": 250000
+  },
+  "snapshot": {
+    "company": {
+      "id": "58430945350",
+      "name": "Northwind Analytics",
+      "slaTier": "enterprise",
+      "renewalDate": "2026-10-30",
+      "annualValueMinor": 18000000,
+      "stripeCustomerId": "cus_VForL4hKmzZytA"
+    },
+    "incident": {
+      "id": "96c6bc85-67be-4224-b0bb-66ba1f3040ad",
+      "identifier": "AVA-6",
+      "title": "Checkout API outage",
+      "severity": "sev1",
+      "startedAt": "2026-09-08T14:00:00Z",
+      "resolvedAt": "2026-09-08T17:10:00Z",
+      "affectedCompanyIds": [
+        "58445344385",
+        "58426002498",
+        "58424616243",
+        "58413899317",
+        "58420738851",
+        "58430945350",
+        "58433412938"
+      ]
+    },
+    "thread": [
+      {
+        "ts": "1789328242.836509",
+        "threadTs": "1789328242.836509",
+        "userId": "bot:B0C1MJ65DAQ",
+        "authorName": "Hana Ito (Northwind, VP Operations)",
+        "text": "Tuesday afternoon your checkout API was down for three hours. Our renewal conversation is next month and this is going to come up."
+      },
+      {
+        "ts": "1789328242.982729",
+        "threadTs": "1789328242.836509",
+        "userId": "bot:B0C1MJ65DAQ",
+        "authorName": "Omar Haddad (Northwind, Platform)",
+        "text": "For the record we logged 5xx from 14:02 to 17:08 UTC."
+      },
+      {
+        "ts": "1789328243.155849",
+        "threadTs": "1789328242.836509",
+        "userId": "U0C1MHQB4KE",
+        "text": "Hana, Omar, thank you, and I am sorry. Your enterprise plan covers this, so we are crediting $2,500."
+      }
+    ],
+    "credits": [],
+    "readAt": "2026-09-13T19:37:42.702Z"
+  },
+  "searches": [
+    {
+      "query": "Northwind",
+      "matches": [
+        "Northwind Analytics"
+      ]
+    }
+  ],
+  "usage": {
+    "inputTokens": 13331,
+    "outputTokens": 1323,
+    "turns": 5,
+    "latencyMs": 33594
+  }
+}
