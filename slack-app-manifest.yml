@@ -16,6 +16,8 @@ oauth_config:
       - chat:write
       - chat:write.customize
       - users:read
+    user:
+      - chat:write
 settings:
   interactivity:
     is_enabled: true
