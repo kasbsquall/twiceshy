@@ -16,7 +16,7 @@
   <img src="docs/brand/apps/linear.png" alt="Linear" height="34">&nbsp;&nbsp;&nbsp;&nbsp;
   <img src="docs/brand/apps/stripe.png" alt="Stripe" height="34">&nbsp;&nbsp;&nbsp;&nbsp;
   <img src="docs/brand/apps/claude.png" alt="Claude" height="34">
-  <br><sub>Slack, HubSpot, Linear and Stripe, orchestrated by one Claude agent</sub>
+  <br><sub>Slack, HubSpot, Linear and Stripe, orchestrated by one Claude agent</sub><br><sub>Built solo by Kevin Soto for the Multi-App AI Agent Hackathon by Lemma, Comma Capital, Arga Labs and Userlens, September 13, 2026</sub>
 </p>
 
 <p align="center">
