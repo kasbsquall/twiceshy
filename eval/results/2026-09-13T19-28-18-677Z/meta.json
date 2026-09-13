@@ -1,0 +1,8 @@
+{
+  "startedAt": "2026-09-13T19-28-18-677Z",
+  "commit": "b57fcda",
+  "model": "claude-haiku-4-5",
+  "k": 3,
+  "scenarios": 3,
+  "runs": 9
+}

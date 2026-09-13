@@ -1,0 +1,8 @@
+{"runId":"run_mu07ighs_d32b4a","step":"run","status":"intent","detail":"approval started by U0C1MHQB4KE","at":"2026-09-13T19:28:58.823Z"}
+{"runId":"run_mu07ighs_d32b4a","step":"stripe_credit","status":"intent","at":"2026-09-13T19:28:59.352Z"}
+{"runId":"run_mu07ighs_d32b4a","step":"stripe_credit","status":"done","objectId":"cbtxn_1UFJ5RQL5bFVYvXnr50nqfkj","at":"2026-09-13T19:28:59.566Z"}
+{"runId":"run_mu07ighs_d32b4a","step":"hubspot_note","status":"intent","at":"2026-09-13T19:28:59.567Z"}
+{"runId":"run_mu07ighs_d32b4a","step":"hubspot_note","status":"done","objectId":"116833363509","at":"2026-09-13T19:29:00.160Z"}
+{"runId":"run_mu07ighs_d32b4a","step":"slack_reply","status":"intent","at":"2026-09-13T19:29:00.162Z"}
+{"runId":"run_mu07ighs_d32b4a","step":"slack_reply","status":"done","objectId":"1789327754.008109","at":"2026-09-13T19:29:00.352Z"}
+{"runId":"run_mu07ighs_d32b4a","step":"run","status":"done","at":"2026-09-13T19:29:00.353Z"}

@@ -161,7 +161,7 @@ In CI, test/crash.process.test.ts starts the runner as a child process that exit
 ### Failure catalog
 
 - **s1, second repeat (`r1` in runs.json), `run_mu064sdf_837abb`: expected PASS, got BLOCK.** Claude's own reasoning named the right incident ("Checkout API outage (AVA-6)"), but the incident ID it submitted was AVA-7, the webhook incident. The verifier trusts IDs, not prose, so the guard read AVA-7 from Linear, saw it does not list Acme Inc and that its policy amount is $500, and blocked with `ACCOUNT_IDENTITY_MISMATCH` and `AMOUNT_VS_POLICY`. No money moved and a person would see why on the card. It is a false block. Replay it with `npm run replay -- run_mu064sdf_837abb`.
-- A likely next fix: cross-check the submitted incident ID against the incident named in Claude's reasoning and ask the model once more when they disagree. Not built.
+- The same mistake happened once more in a live demo run. **Fix, built after the 66-run eval:** Claude now submits the readable identifier (AVA-6) and code maps it to the Linear ID; an identifier that does not exist goes back to the model as an invalid submission (src/agent/resolve.ts, test/agent.test.ts). A live re-run of s1, s2 and s8 at k=3 with the fix returned the expected verdict in 9 of 9 runs ([`eval/results/2026-09-13T19-28-18-677Z`](eval/results/2026-09-13T19-28-18-677Z/results.md)). The 66-run numbers above are from before the fix and are left as they were.
 
 The baseline's misses are all in `results.md`.
 
