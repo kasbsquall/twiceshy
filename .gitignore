@@ -7,3 +7,4 @@ coverage/
 ledger/*.jsonl
 !ledger/.gitkeep
 *.log
+ledger/cases/
